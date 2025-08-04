@@ -206,6 +206,18 @@ class BONUS:
                 day_index = datetime.fromisoformat(self.response.realTime).weekday()
                 maxAmount = maxAmount[day_index]
             
+            # Handle progressive max amounts based on usage count
+            progressiveMax = amountData.get("progressiveMax", None)
+            if progressiveMax and isinstance(progressiveMax, list):
+                # Get current usage count for this bonus type
+                currentUsageCount = len([x for x in self.currentBonusList if x["BonusCampaignId"] == self.id])
+                
+                # If it's the first usage, use index 0; second usage, use index 1, etc.
+                progressiveIndex = min(currentUsageCount, len(progressiveMax) - 1)
+                maxAmount = progressiveMax[progressiveIndex]
+                
+                self.response.log(f"Progressive max: Usage count {currentUsageCount}, using max amount {maxAmount}")
+
             # Calculate before amount based on usage settings
             if usageData.get("resetDayCount", None):
                 resetDayCount = usageData["resetDayCount"]

@@ -1449,6 +1449,74 @@ class CampaignController:
         except Exception as e:
             return self.ErrorFunc(e)
 
+    def _checkDepositBonusUsage(self, userData, allowedBonuses:list=None, maxPerDeposit:int=1):
+        """
+        Aynı yatırımdan daha önce bonus alınmış mı kontrol et
+        
+        Args:
+            userData: Kullanıcı verileri
+            allowedBonuses: Kontrol edilecek bonus ID'leri listesi
+            maxPerDeposit: Her yatırım için maksimum bonus sayısı
+            
+        Returns:
+            dict: Kontrol sonucu
+        """
+        try:
+            if not allowedBonuses:
+                allowedBonuses = []
+                
+            # Son yatırımı al
+            lastDeposit = self.__returnLastDeposit(userData, 30)
+            if not lastDeposit:
+                return self._returnMessage(False, "LAST_DEPOSIT_NOT_FOUND")
+                
+            lastDepositId = lastDeposit["TransactionId"]
+            
+            # Bu yatırımdan alınan bonusları kontrol et
+            from_date = datetime(2016, 1, 1)
+            to_date = datetime.now()
+            
+            bonusList = self.app.getPlayerBonuses(from_date, to_date, userData["userId"])
+            
+            usedBonusCount = 0
+            usedBonusIds = []
+            
+            for bonus in bonusList:
+                if bonus["BonusCampaignId"] in allowedBonuses:
+                    # Note içindeki DepositIds'e bak
+                    note = bonus.get("Note", "")
+                    
+                    # Note JSON formatında parse et
+                    try:
+                        if note and isinstance(note, str):
+                            import json
+                            noteData = json.loads(note)
+                            depositIds = noteData.get("DepositIds", [])
+                            
+                            if lastDepositId in depositIds:
+                                usedBonusCount += 1
+                                usedBonusIds.append(bonus["BonusCampaignId"])
+                    except:
+                        # Note string formatında da olabilir
+                        if str(lastDepositId) in str(note):
+                            usedBonusCount += 1
+                            usedBonusIds.append(bonus["BonusCampaignId"])
+            
+            if usedBonusCount >= maxPerDeposit:
+                return self._returnMessage(False, "DEPOSIT_BONUS_LIMIT_EXCEEDED", 
+                                         depositId=lastDepositId, 
+                                         usedBonusCount=usedBonusCount,
+                                         usedBonusIds=usedBonusIds,
+                                         maxPerDeposit=maxPerDeposit)
+                
+            return self._returnMessage(True, "DEPOSIT_BONUS_USAGE_VALID", 
+                                     depositId=lastDepositId,
+                                     usedBonusCount=usedBonusCount,
+                                     remainingUsage=maxPerDeposit-usedBonusCount)
+            
+        except Exception as e:
+            return self.ErrorFunc(e)
+
     def getControlList(self):
         """Kontrol fonksiyonlarının listesini ve parametrelerini döndürür"""
         

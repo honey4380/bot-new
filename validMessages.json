@@ -482,5 +482,18 @@
     "DIGI_LOGIN_WAITING": {
         "code": 10001,
         "message": "Aktif hesap bulunamadı, aktif hesap bekleniyor"
+    },
+    
+    "DEPOSIT_BONUS_LIMIT_EXCEEDED": {
+        "code": 9170,
+        "message": "Bu yatırımdan maksimum {maxPerDeposit} bonus alabilirsiniz. Daha önce {usedBonusCount} bonus alınmış. Yatırım ID: {depositId}"
+    },
+    "DEPOSIT_BONUS_USAGE_VALID": {
+        "code": 9171,
+        "message": "Bu yatırımdan bonus alabilirsiniz. Yatırım ID: {depositId}, Kalan kullanım: {remainingUsage}"
+    },
+    "LAST_DEPOSIT_NOT_FOUND": {
+        "code": 9172,
+        "message": "Son yatırım bulunamadı"
     }
 }

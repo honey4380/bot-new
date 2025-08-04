@@ -254,6 +254,14 @@
             // checkIpConflict: IP çakışma kontrolü
             "controlName": "checkIpConflict",
             "params": {}  // Parametre gerektirmez
+        },
+        {
+            // checkDepositBonusUsage: Aynı yatırımdan bonus kullanım kontrolü (YENİ)
+            "controlName": "checkDepositBonusUsage",
+            "params": {
+                "allowedBonuses": [6001, 6002],  // Kontrol edilecek bonus ID'leri listesi
+                "maxPerDeposit": 1               // Her yatırım için maksimum bonus sayısı
+            }
         }
     ]
 }
@@ -911,6 +919,40 @@ Found matching range: 3001-7500 for amount 6000
     ]
 }
                     </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Kademeli Maksimum Bonus Limitleri (YENİ)</h3>
+                <p>Her bonus kullanımında farklı maksimum değerler belirleme.</p>
+                
+                <div class="example">
+                    <pre><code class="language-json">
+{
+    "value": {
+        "calculationType": "percentage",
+        "amountCalculation": "lastDeposit",
+        "amount": [
+            {
+                "min": 100,
+                "max": null,
+                "percentage": 100
+            }
+        ],
+        "progressiveMax": [2000, 2500, 3000]  // 1. kullanım: 2000 TL, 2. kullanım: 2500 TL, 3. kullanım: 3000 TL
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Kullanım Senaryoları:</h4>
+                    <ul>
+                        <li><strong>1. Kullanım:</strong> Maksimum 2000 TL bonus</li>
+                        <li><strong>2. Kullanım:</strong> Maksimum 2500 TL bonus</li>
+                        <li><strong>3. Kullanım:</strong> Maksimum 3000 TL bonus</li>
+                        <li><strong>4+ Kullanım:</strong> Son değer (3000 TL) kullanılır</li>
+                    </ul>
                 </div>
             </div>
         </section>
