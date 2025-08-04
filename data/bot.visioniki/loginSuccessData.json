@@ -1,0 +1,112 @@
+{
+    "Login": {
+        "Request URL": "https://apisd.bopanel.com/token",
+        "Request Headers": {
+            "content-length": "442",
+            "sec-ch-ua-platform": "\"Linux\"",
+            "timezone": "3",
+            "uid": "NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5ODkwNg==1754265298906",
+            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+            "sec-ch-ua-mobile": "?0",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/x-www-form-urlencoded",
+            "origin": "https://sd.bopanel.com",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://sd.bopanel.com/",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9",
+            "priority": "u=1, i"
+        },
+        "Request Body": "username=bot.visioniki&password=**BetCore-2025%21%21&client_id=4040&grant_type=password&u_id=NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5ODkwNQ%3D%3D1754265298905",
+        "Response": {
+            "Status Code": 200,
+            "Headers": {
+                "content-type": "application/json;charset=UTF-8",
+                "access-control-allow-origin": "https://sd.bopanel.com",
+                "content-length": "10489",
+                "expires": "Sun, 03 Aug 2025 23:54:59 GMT",
+                "cache-control": "max-age=0, no-cache, no-store",
+                "pragma": "no-cache",
+                "date": "Sun, 03 Aug 2025 23:54:59 GMT",
+                "server-timing": "cdn-cache; desc=MISS",
+                "alt-svc": "h3=\":443\"; ma=93600",
+                "set-cookie": "ak_bmsc=ACCAA774D1C6BF5DAC34EA589E010EB2~000000000000000000000000000000~YAAQT+8gFz5JbF+YAQAAcSlcchyOn+gnjtD40oOUp4zwrlhAmy0uyNL6Y6I59MmVT+XgG+gKB6dl+YS7ZmvfHF6V96KbNPi1YDDqKW7KzKtsaaOJP2oaBPrSfQnbm5TCNxRRM0usz0uZhhLPuIqg06gWh+IruOTN53RgiRbZFHw8dW7rTMAoNSQy0fAty9eooPOBTro24UJffnF/2iQf7ItU3dchcgcyb3tt7mPnithLSqwcq+piANGBRg8c6aMP9cdxBPQedltghHtSNkA3KLe+BZMgLjewdYvoxty56S4fDVBf/xtEls8een6YISud83xmHwpHB4tPLCo9dS+RZtdSNCD0HfeLIOBTUEK3koZ1dACsXNFEeaKQeybas3dixf2maacmrU7tkAWM; Domain=.bopanel.com; Path=/; Expires=Mon, 04 Aug 2025 01:54:59 GMT; Max-Age=7200; SameSite=None; Secure"
+            },
+            "Body": null
+        },
+        "Additional Data": {
+            "uid": "NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5ODkwNQ%3D%3D1754265298905",
+            "refresh_token": "0f074ca9782144c8abb813b6dee85b80",
+            "client_id": "4040"
+        }
+    },
+    "LoginAfter": {
+        "Request URL": "https://apisd.bopanel.com/token",
+        "Request Headers": {
+            "content-length": "441",
+            "sec-ch-ua-platform": "\"Linux\"",
+            "authorization": "Bearer K8GyG1bbGCei46F3RxZAIc8c3oQUZ2zE-Ivp5q_xJQz57C7_36Wk1kcZ8A0sVVUSo884RGKRUakiwj-NSwKeJN_iCHE6zImCzzztZR0NeEG9k5R_2SAmdQDNSLGyEQ0UEaKQpaaPA_C3JYLASyNX1nS1pEpEm3cD3kpVGz22zXCfjSYi8tP5_qIkIC6vtOKfM3CoMULPxtToOx-u4RC3hLE7afXbOEaNwOmlCDFjrrTO6hbrOqbFyFJLdG8usSgMTNZS4_LinOSM0IlLbiOChpD-IlqhLn5vZKzwbMBYylIlUOCyqzyPs_ceJIPrP8fkobzj9LP7OM3hzdNBMwR64wRddCu0EUE-EuaS2Iy-uNORT5OtIBqBtLD8S-zpAsTaKQYYCBswtUAqrEbXdckxWVGRt3fRFwCTMtRKePmTENTtj7kFkrOVyyaKDNsXv4liwnduYSH5ERJjg9YX6cuMntB32-tO7Fg22VflBdWyypPOcolXQsbOVNZJgrUNhjljlgxWNXHGHEXzXw2COweCxlsqx-Ke0MAKlSBrU6vyuMgkWcuYqF8GvQs1ZnKvTLlR_mo2DeIwbzuo7ZrnfQOUIN1XMqzd3-xSHQVS4hlUTgdyldMHxDoWDxljPF2-am88iODqjsJ6M0okHQ8gPlCzDg",
+            "timezone": "3",
+            "uid": "NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5OTgxNg==1754265299816",
+            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+            "sec-ch-ua-mobile": "?0",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/x-www-form-urlencoded",
+            "origin": "https://sd.bopanel.com",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://sd.bopanel.com/",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9",
+            "priority": "u=1, i"
+        },
+        "Request Body": "client_id=4040&grant_type=refresh_token&refresh_token=24b05760ccef4bff9a863cfedded8602&u_id=NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5OTgxNQ%3D%3D1754265299815",
+        "Response": {
+            "Status Code": 200,
+            "Headers": {
+                "content-type": "application/json;charset=UTF-8",
+                "access-control-allow-origin": "https://sd.bopanel.com",
+                "content-length": "10489",
+                "expires": "Sun, 03 Aug 2025 23:55:00 GMT",
+                "cache-control": "max-age=0, no-cache, no-store",
+                "pragma": "no-cache",
+                "date": "Sun, 03 Aug 2025 23:55:00 GMT",
+                "server-timing": "edge; dur=64",
+                "alt-svc": "h3=\":443\"; ma=93600",
+                "set-cookie": "ak_bmsc=C93A5E99E3C5A6A273E88E7CE41F57A9~000000000000000000000000000000~YAAQT+8gF0BJbF+YAQAAdixcchyHfyae7ibXasotSeeZlw5ET0WCEN6oSwEhZUxnt5pxvguh6ZOosmqR4rnlcN+QDb1ewpTNYNNMrJv4lmmr9n22UgDbDu2KUTM+jdSjFPoROHQnty/oyIhQh3n1bQzkUBoTajPniNhVzxHNVkly1/+k4/HJQpPddMGbrnALpDunjwpH0o0zakzm9ZfV5YykKUzaLMLTgk1YKd/GxQpSnZdHifoH2+oxgLbZshNVYSnw0votXSZx4cfibsSfWT4VhBT/dIBBlyIEav7ajv2QZYZeuzzh0c9JXJE1SbBYGnT71Btc9GOIzk0B7bprXkZgmDGSaBEOmECJ5enss2DIyk+TUTexrlbASy0UrWsUXbRCUEsqMfdU+gtx; Domain=.bopanel.com; Path=/; Expires=Mon, 04 Aug 2025 01:54:59 GMT; Max-Age=7199; SameSite=None; Secure"
+            },
+            "Body": {
+                "access_token": "JlfjFfzYvPS8o8StCzRisQ5oD0qL3FU7cWIYZfmidBhMXoz1RRb7CFlNm9pSa7w6P3GgdaK5CGN0C98gOJxcylJZH2CLMY1c_XgaRyqaFd-X6yKWZJyrKmXLtgrj-A2MUnw_knzd3hx8Exq0X9ae5MtSLQRNemcmLLgPcJoGhZKzRoJ5ppJ3--bAUZZ4kErA0ES5H3HIHfT2nOdcxSd3dFxsc-EzHAoqAj5XRLboQOjr28XZNbSNUgsauOYomSq1X3U_sPdo2RS7j6zt2GMoKrHtWlmvhbU0uiNl4NoJsvhQDUNE74IAK6w2Oi05AhUg2fpkZO4grTdI6bP6u7cgs3jHTFZad-EQNNpi-OWybwdVtmMfxc968Bcv8sHWISp_2Rv702soHr_khBHj8AqNMxE91xwAU5vAPWtJvWX5jv2-07rcm6T284-m4xUFRcWsjBjohdzzurvE5W8tYCWCWPeAxTSSTSpMfidpy8GRY-KOMMzzaGYjBj0vBiG3SQsD6GlNUetTZIe9jEWZEJbfUeQRMzwJqP817ybIuQ7thNW6xcHl-dJ8nEcAkY7P1sPFvqRSPtPxREtj8mP9-bF271Aa8OsL0VHkmeMx9J3O0pCwujDb7OfOPj5wvudvAo-1j1rTgmOxPYU5JmoruCWmDw",
+                "token_type": "bearer",
+                "expires_in": 299,
+                "refresh_token": "c5623228e2c044e395a6b9cc1465f523",
+                "as:client_id": "4040",
+                "UserName": "bot2vision visiontech",
+                "PartnerId": "10285",
+                "UserId": "13979",
+                "CurrencyId": "TRY",
+                "PasswordChangeRequired": "False",
+                "InternalUser": "False",
+                "TwoFactorAuthState": "0",
+                "AdoEntitySetting": "[{\"PartnerId\":10285,\"Method\":\"payment\",\"IsEntity\":true}]",
+                "LanguageId": "en",
+                "PartnerGroupId": "20",
+                "BonusCalculationTimeZone": "3",
+                ".issued": "Sun, 03 Aug 2025 23:55:00 GMT",
+                ".expires": "Mon, 04 Aug 2025 00:00:00 GMT",
+                "Permissions": "['viewplayersappreport','viewbadgemanagementpage','viewplayerbonusrequestsreport','viewplayersnotesandattentionsreport','viewcasinobets','viewsportbets','viewjackpotwinsreport','viewplayerbonusesrestrictionreport','createcreditcorrectiononclient','createdebitcorrectiononclient','viewplayerbalanceadjustmentpage','viewclientbycategory','viewcasinobets','viewplayercasinobets','viewsportbets','viewplayersportbets','view1stsportbets','viewinternetbets','viewinternetbetsshort','viewclientbycategory','viewrealtime','viewtotalsonlineclients','createnote','deletenote','viewnote','viewpartnerattentions','viewpartnerattentionslist','viewplayerattentionspage','viewplayernotespage','viewdashboard','viewdepositstotals','viewpaymentrequests','viewwithdrawalstotals','viewplayerdashboard','viewpaymentrequests','viewclientbycategory','viewdepositspage','viewplayersdepositspage','viewplayerswithdrawalspage','viewwithdrawalspage','viewpaymentsystems','viewpartnercurrencylist','viewplayercasinobets','viewclientmessage','viewplayermessagespage','viewprogressreport','createclientmessage','replytoplayermessages','cancelprogressreport','editclient','viewclient','viewclientbycategory','createclientidentity','viewcurrency','viewplayerlist','viewplayeraccounthistorypage','sendmailtoplayer','viewattachedcardnumberslist','viewclientbankdetails','viewpartnerattentions','viewpartnerclientcategorylist','viewpartnercountrieslist','viewpartnerpaymentcategorylist','viewplayerhistorylog','viewplayermaininfopage','viewtestplayermaininfo','changeplayerstate','editclientbankdetails','viewoperationtypenameslist','viewplayerstatemanagement','viewblockedcasinobetsfeatureinplayermaininfo','viewblockedforautomatedcashback','viewblockedfordynamicpromotion','viewblockedforpromocodes','viewblockedforreferfriend','viewblockedplayersstatefromplayermaininfo','viewblockedsportbetsfeatureinplayermaininfo','allowpaymentrequest','paydepositfrombetshop','viewclientbycategory','viewpaymentrequests','addmoneytopartnerbank','cancelpaymentrequest','canceltransferfrompaymentsystem','createdepositfrombetshop','createdepositfrompaymentsystem','createdeposittobetshop','createdeposittoproduct','createpaymentrequest','createwithdrawfrombetshop','createwithdrawfromclient','distinctmoneyfrompartnerproduct','frozenpaymentrequest','inprocesspaymentrequest','kycpaymentrequest','paypartnerpaymentsettingdebt','paypaymentrequest','paywinfrombetshop','paywithdrawfrombetshop','viewpaymentsystems','viewdepositspage','viewplayersdepositspage','viewplayerswithdrawalspage','viewwithdrawalspage','allowednameforwithdrawal','checknameforwithdrawal','viewcasinobets','viewsportbets','viewreportdeposittotals','viewreportwithdrawaltotals','viewplayermultiaccountpage','viewplayertabmultiaccountpage','allowpaymentrequest','cancelpaymentrequest','createpaymentrequest','paypaymentrequest','viewclient','viewclientbycategory','viewpaymentrequests','viewplayerlist','viewplayerswithdrawalspage','viewwithdrawalspage','viewtestplayermaininfo','viewinternetbets','viewclientbycategory','viewpaymentrequests','viewpaymentsystems','viewplayersdepositspage','viewplayerswithdrawalspage','exportdeposit','exportwithdrawal','exportnewdeposits','exportnewwithdrawals','editplayerspaymentlimits','viewplayerspaymentlimitspage','viewplayerpaymentlimits','editplayerpaymentlimits','viewplayeraccounthistorypage','viewoperationtypenameslist','viewplayersbetsproviderhourlyupdatepage','viewclient','viewtestplayermaininfo','allowpaymentrequest','paydepositfrombetshop','viewclientbycategory','viewpaymentrequests','addmoneytopartnerbank','cancelpaymentrequest','canceltransferfrompaymentsystem','createdepositfrombetshop','createdepositfrompaymentsystem','createdeposittobetshop','createdeposittoproduct','createpaymentrequest','createwithdrawfrombetshop','createwithdrawfromclient','distinctmoneyfrompartnerproduct','frozenpaymentrequest','inprocesspaymentrequest','kycpaymentrequest','paypartnerpaymentsettingdebt','paypaymentrequest','paywinfrombetshop','paywithdrawfrombetshop','viewpaymentsystems','allowednameforwithdrawal','viewplayerswithdrawalspage','viewwithdrawalspage','viewtotalofreportbycorrections','viewclient','viewdepositsforverification','viewtestplayermaininfo','viewclient','viewplayergaminghistorypage','viewtestplayermaininfo','cancelplayerbonus','viewclient','viewclientbycategory','viewtestplayermaininfo','cancelplayerbonuscampaign','viewclient','viewplayerlogspage','viewtestplayermaininfo','viewplayeradminuserlogs','viewclient','viewplayersessionspage','viewtestplayermaininfo','viewclient','viewplayerggrhistorypage','viewtestplayermaininfo','editresponsiblegamingplayerdepositlimits','editresponsiblegamingplayerrealitybetlimit','editresponsiblegamingplayerrealitycheck','editresponsiblegamingplayerrealitynetlosslimit','editresponsiblegamingplayerrealityselfexclusion','editresponsiblegamingplayerrealitytimesout','viewresponsiblegamingplayerbetlimit','viewresponsiblegamingplayerdepositlimits','viewresponsiblegamingplayernetlosslimit','viewresponsiblegamingplayerrealitycheck','viewresponsiblegamingplayerselfexclussion','viewresponsiblegamingplayertimeout','viewplayerresponsiblegamingpage','showbalancebeforebalanceafter','showplayerbalance','showdocumentid','showmobilenumber','showplayerusername','showplayeraddress','showtotalcasinobets','showtotalsportbets','showplayerdepositstotals','showplayerwithdrawalstotals','viewclient','viewclientbycategory','viewtestplayermaininfo','viewplayercasinobets','viewplayersportbets','viewclient','viewclientbycategory','viewtestplayermaininfo','viewplayercasinobets','viewplayersportbets','showemail','viewclient','viewclientbycategory','viewplayertabmultiaccountpage','viewtestplayermaininfo','addnewdomains','allowpartnerdomainsrediration','deletedomains','editpartnerdomainsrediration','viewpartnerdomainsconfigurationpage','viewclient','viewclientbycategory','viewinternetbetsshort','viewcasinobets','viewsportbets','viewclient','viewclientbycategory','viewplayercasinobets','viewclient','viewclientbycategory','viewplayerlist','viewplayermaininfopage','viewblockedforpromocodes','viewblockedfordynamicpromotion','viewblockedforreferfriend','viewplayerstatemanagement','viewmarketingdashboardpage','viewfirsttimedepositwidget','viewsignupswidget','viewuniqueplayerbetsbydevicetypewidget','viewclient','viewclientbycategory','viewpaymentrequests','viewpaymentsystems','viewplayersdepositspage','viewclient','viewclientbycategory','viewpaymentrequests','viewpaymentsystems','viewplayerswithdrawalspage','cancelplayerbonus','cancelplayerbonuscampaign','viewbonuscampaignpage','viewplayersbonuscampaignsreportpage','viewplayerbonusrequestsreport','createpartnerdepositrate','createpartnerwithdrawalrate','editpartnerdepositratepage','editpartnerwithdrawalratepage','viewpartnerdepositratehistory','viewpartnerdepositratepage','viewpartnerwithdrawalratehistory','viewpartnerwithdrawalratepage','viewbrandpage','createdebitcorrectiononclient','viewplayerbalanceadjustmentpage','viewclient','viewplayerbonuscampaignreportpage','viewplayerbonusesdetails','viewclient','viewbonusbetspage','viewdepositstotals','viewwithdrawalstotals','viewnewdepositspage','viewnewwithdrawalspage','viewplayernewdepositspage','viewplayernewwithdrawalspage','addbonuscampaigntoclient','viewtopreport','viewplayerpaymentrules','viewrefereesreport','viewreferrersbonusdetailsreport','editbonuspacks','viewbonuspackspage','createbonuscampaignlinkrule','createbonusgroupstab','editbonuscampaignlinkrule','viewbonuscampaigngrouplogspage','viewbonusgroupstab','viewlinkedbonuscampaigntab','editbonusgrouptabs','editbonusgroupstab','showwithdrawalsdetails','showdepositsdetails','showwithdrawalsdetails','showplayerbonusestotals','showgaminghistorytotalamount','viewtransactionshistorypage','viewreportbydeposit','viewreportbywithdrawal','exportreportbydeposit','exportreportbywithdrawal','viewreportbydeposit','viewreportbywithdrawal','exportplayersportbets','exportsportbets','viewplayersportbets','viewsportbets','exportcasinobets','exportplayercasinobets','viewcasinobets','viewplayercasinobets','viewgamingrevenuebycalculateddatereport','viewtotalsgamingrevenuebycalculateddatereport','exportgamingrevenuebycalculateddatereport','exportbonusbets','viewbonusbetspage','viewpartner','changemypassword','editmyprofile','viewmyprofile','viewcmsuserpositionlist','viewpartnerlobbylist','viewclientcategorylist','viewdocumentlist','viewgambleruleslist','viewpartnerattentionslist','viewpartnerclientcategorylist','viewpartnercountrieslist','viewpartnercountrylist','viewpartnercurrencylist','viewpartnerfeatureditemlist','viewpartnerlanguagelist','viewpartnerlobbygrouplist','viewpartnerpaymentcategorylist','viewpartnerpaymentlist','viewpartnerproductlist','viewsegmentlist','viewsporteventlist','viewregionslist','viewpartnerproviderslist','viewpromotionruleslist','viewdynamicgamesegmentlist','viewpartnergameproviderlist','viewclientbycategory','viewpartnermobileapplist','viewoperationtypenameslist','viewbonuspackslist','viewaffiliate/agentlist','viewbonustypeslist','viewbonuslinkiterationlist','viewplayersdropdownlist','viewpromotionprizeslist','viewbonuslist','viewbonuscampaignconfigurations','viewpartnerbankslist','viewpaymentsystems','viewpartnergrouplist']"
+            }
+        }
+    },
+    "refresh_token": "c5623228e2c044e395a6b9cc1465f523",
+    "client_id": "4040",
+    "uid": "NzcxMTExMjIxMDUxMDgxMDg5NzQ3NTM0NjQ4MzI0MDg4NDk0OTU5MzI3NjEwNTExMDExNzEyMDMyMTIwNTY1NDk1NTQ1MjQxMzI2NTExMjExMjEwODEwMTg3MTAxOTg3NTEwNTExNjQ3NTM1MTU1NDY1MTU0MzI0MDc1NzI4NDc3NzY0NDMyMTA4MTA1MTA3MTAxMzI3MTEwMTk5MTA3MTExNDEzMjY3MTA0MTE0MTExMTA5MTAxNDc0OTUxNTY0NjQ4NDY0ODQ2NDgzMjgzOTcxMDI5NzExNDEwNTQ3NTM1MTU1NDY1MTU0MTc1NDI2NTI5ODkwNQ%3D%3D1754265298905",
+    "secCHUA": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "platform": "\"Linux\""
+}

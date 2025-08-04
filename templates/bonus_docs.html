@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonus API Dokümantasyonu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bonus_docs.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bonus API Dokümantasyonu</h1>
+            <p>Bonus ekleme ve kontrol işlemleri için API dokümantasyonu</p>
+        </header>
+
+        <section id="endpoint">
+            <h2>Endpoint: /api/checkBonusEligibility</h2>
+            <div class="endpoint-details">
+                <p>Method: POST</p>
+                <p>Authentication: Bearer Token Required</p>
+            </div>
+        </section>
+
+        <section id="request-format">
+            <h2>İstek Formatı ve Detaylı Örnek</h2>
+            <div class="example-wrapper">
+                <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 4478,  // Bonus kampanya ID'si
+            "value": {
+                // calculationType: Bonus hesaplama tipi (Zorunlu)
+                // - fixed: Sabit miktar bonus (örn: 250 TL, 50 freespin)
+                // - percentage: Yüzdelik bonus (örn: %100, %20)
+                "calculationType": "percentage",
+                
+                // amountCalculation: Bonus miktarı hesaplama yöntemi
+                // - lastDeposit: Son yatırım üzerinden
+                // - yesterdayTotalDeposit: Dünkü tüm yatırımların toplamı üzerinden (YENİ)
+                // - loss: Kayıp üzerinden (calculationDate ve minDiff gerekli)
+                // - profit: Kar üzerinden (calculationDate ve minDiff gerekli)
+                // - kombineKuponLoss: Kombine kupon sigortası (YENİ)
+                "amountCalculation": "loss",
+                
+                // calculationDate: Kar/Zarar hesaplama tarihi (UTC)
+                // loss veya profit için zorunlu
+                // Format: YYYY-MM-DDTHH:mm:ss
+                "calculationDate": "2025-02-21T22:05:00",
+                
+                // minDiff: Minimum kar/zarar miktarı
+                // loss veya profit için zorunlu
+                "minDiff": 20,
+                
+                // maxDiff: Maksimum kar/zarar miktarı 
+                // Opsiyonel, null = limit yok
+                "maxDiff": null,
+                
+                // amount: Bonus miktar aralıkları
+                // Kademeli bonus için birden fazla aralık tanımlanabilir
+                "amount": [
+                    {
+                        "min": 20,     // Min yatırım/kar/zarar miktarı
+                        "max": 9999,   // Max yatırım/kar/zarar miktarı
+                        "percentage": 20 // fixed tipinde: Direkt bonus miktarı
+                                       // percentage tipinde: Yüzde değeri
+                    },
+                    {"min": 10000, "max": 19999, "percentage": 25},
+                    {"min": 20000, "max": null, "percentage": 30} // max: null = üst limit yok
+                ],
+                
+                // max: Maksimum bonus limiti (percentage tipinde zorunlu)
+                // 1) Tek değer: Sabit limit
+                // "max": 2000
+                // 2) Günlük farklı limitler: [Pzt,Sal,Çar,Per,Cum,Cmt,Paz]
+                "max": [600, 300, 300, 300, 300, 300, 300]
+            },
+            "usage": {
+                // maxUses: Maksimum kullanım sayısı (Zorunlu)
+                // -1: Sınırsız kullanım
+                // 1: Tek kullanımlık
+                // >1: Belirtilen sayı kadar
+                "maxUses": -1,
+                
+                // resetDayCount: Kullanım hakkı sıfırlama periyodu
+                // 1) Sayı: Gün bazında (örn: 1 = her gün sıfırla)
+                // 2) "activeDays": Aktif günlerde sıfırla
+                "resetDayCount": "activeDays",
+                
+                // resetHour: Sıfırlama saati (0-23)
+                // Varsayılan: 0 (gece yarısı)
+                "resetHour": 0,
+                
+                // activeDays: Bonusun aktif olduğu günler
+                // resetDayCount="activeDays" ise zorunlu
+                // [Pzt,Sal,Çar,Per,Cum,Cmt,Paz]
+                // 1: Aktif, 0: Pasif
+                "activeDays": [1,1,0,0,0,1,1]
+
+                // availableBonuses: Bonus kullanımı sırasında kontrol edilicek bonuslar
+                // Opsiyonel, null = kontrol yok
+                // Kullanılabilir bonuslar: [4478, 4479, 4480]
+                
+                "availableBonuses": [4478, 4479, 4480], // Kullanılabilir bonus idleri
+            },
+            "conditions": {
+                // Bonus koşulları
+                // activeBonusCheck: Aktif bonus kontrolü yapılsın mı?
+                "activeBonusCheck": true
+            }
+        }
+    ],
+    // Kullanıcı bilgileri (userid veya username zorunlu)
+    "username": "testUser",    // Kullanıcı adı 
+    "userid": 123456,         // Kullanıcı ID (username varsa opsiyonel)
+    
+    // loadBonus: Bonus yüklensin mi?
+    // true: Kontroller başarılı olursa bonusu yükle
+    // false: Sadece uygunluk kontrolü yap
+    "loadBonus": false,
+    
+    // controlParams: Yapılacak kontroller listesi
+    "controlParams": [
+        {
+            // checkLastDeposit: Son yatırım kontrolü
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 1,              // Son kaç gün içinde
+                "min": 100,             // Minimum yatırım tutarı
+                "max": 1000,            // Maximum yatırım tutarı (opsiyonel)
+                "checkIsUsed": true,    // ÖNEMLI: Yatırımdan sonra herhangi bir CASINO veya SPOR bahsi yapılmış mı kontrol eder
+                                      // true = Bet yapılmamış olmalı (bonus almak için)
+                                      // false = Bet kontrolü yapma
+                "beforeBalanceMin": 3,   // Yatırım öncesi min bakiye
+                "beforeBalanceMax": 100,   // Yatırım öncesi max bakiye (opsiyonel)
+                "checkFirstDeposit": true, // İlk yatırım mı kontrolü (opsiyonel)
+                "checkSecondDeposit": false // İkinci yatırım mı kontrolü (opsiyonel)
+            }
+        },
+        {
+            // checkCurrentBalance: Mevcut bakiye kontrolü
+            "controlName": "checkCurrentBalance", 
+            "params": {
+                "max": 3,  // Maximum mevcut bakiye
+                "min": 1   // Minimum mevcut bakiye (opsiyonel)
+            }
+        },
+        {
+            // checkWithdrawExist: Çekim kontrolü
+            "controlName": "checkWithdrawExist",
+            "params": {
+                "days": 1,                // Son kaç gün içinde
+                "hasWithdraw": false,     // Çekim olmamalı
+                "controlAfterDeposit": true, // Son yatırımdan sonraki çekimler
+                "controlMinDepositDiff": 20,  // Min yatırım tutarı kontrolü
+                "controlHourCount": 24     // Son x saat içinde
+            }
+        },
+        {
+            // checkPendingBet: SADECE açık/bekleyen bahis kontrolü
+            "controlName": "checkPendingBet",
+            "params": {
+                "days": 1,     // Son kaç gün içinde
+                "hasBet": false // Açık bahis olmamalı
+            }
+        },
+        {
+            // checkActiveBonusExist: Aktif bonus kontrolü
+            "controlName": "checkActiveBonusExist",
+            "params": {
+                "hasActiveBonus": false // Aktif bonus olmamalı
+            }
+        },
+        {
+            // checkLastDepositMethod: Yatırım yöntemi kontrolü
+            "controlName": "checkLastDepositMethod",
+            "params": {
+                "depositMethod": ["BigPayssBankTransfer", "Paym"], // İzin verilen yöntemler
+                "hasMethod": true // true: Bu yöntemde olmalı, false: Bu yöntemde olmamalı
+            }
+        },
+        {
+            // checkDepositCount: Toplam yatırım sayısı kontrolü  
+            "controlName": "checkDepositCount",
+            "params": {
+                "max": 1,  // Maksimum yatırım sayısı
+                "min": 1   // Minimum yatırım sayısı
+            }
+        },
+        {
+            // checkDepositExist: Yatırım varlığı kontrolü
+            "controlName": "checkDepositExist",
+            "params": {
+                "days": 1,           // Son kaç gün içinde
+                "hasDeposit": true   // Yatırım olmalı mı?
+            }
+        },
+        {
+            // checkWithdrawCount: Çekim sayısı kontrolü
+            "controlName": "checkWithdrawCount",
+            "params": {
+                "max": 5,  // Maksimum çekim sayısı
+                "min": 1   // Minimum çekim sayısı
+            }
+        },
+        {
+            // checkUserRegister: Kullanıcı kayıt tarihi kontrolü
+            "controlName": "checkUserRegister",
+            "params": {
+                "days": 30  // Son kaç gün içinde kayıt olmuş olmalı
+            }
+        },
+        {
+            // checkTimeRange: Zaman aralığı kontrolü
+            "controlName": "checkTimeRange",
+            "params": {
+                "startHour": 14, // Başlangıç saati (0-23)
+                "endHour": 20    // Bitiş saati (0-23)
+            }
+        },
+        {
+            // checkBalanceProfit: Bakiye kar/zarar kontrolü
+            "controlName": "checkBalanceProfit",
+            "params": {
+                "isProfit": false,    // false: Zarar kontrolü, true: Kar kontrolü
+                "maxDiff": 1000,     // Maksimum fark
+                "minDiff": 100       // Minimum fark
+            }
+        },
+        {
+            // checkProfitControlDetailed: Detaylı kar/zarar kontrolü
+            "controlName": "checkProfitControlDetailed",
+            "params": {
+                "days": 1,
+                "controlLastDepositBefore": false,
+                "calculationFirstDepositAfterHourCount": 24,
+                "calculationFirstDepositAfterHourRange": [0, 24],
+                "isDepositFilter": true,
+                "minDiff": 100,
+                "maxDiff": 1000,
+                "isProfit": false
+            }
+        },
+        {
+            // checkYesterdayTotalDeposit: Dünkü toplam yatırım kontrolü (YENİ)
+            "controlName": "checkYesterdayTotalDeposit",
+            "params": {
+                "min": 1000,  // Dünkü toplam yatırım minimum tutarı
+                "max": 50000  // Dünkü toplam yatırım maksimum tutarı (opsiyonel)
+            }
+        },
+        {
+            // checkIpConflict: IP çakışma kontrolü
+            "controlName": "checkIpConflict",
+            "params": {}  // Parametre gerektirmez
+        }
+    ]
+}
+                </code></pre>
+            </div>
+        </section>
+
+        <section id="important-notes">
+            <h2>🚨 ÖNEMLİ NOTLAR VE DÜZELTMELER</h2>
+            
+            <div class="feature-card">
+                <h3>checkIsUsed Parametresi - DÜZELTME</h3>
+                <p><strong>YANLIŞ DOKÜMANTASYON DÜZELTILDI:</strong></p>
+                <p><code>checkIsUsed: true</code> parametresi "yatırımın başka bonusta kullanılıp kullanılmadığını" kontrol ETMİYOR!</p>
+                
+                <div class="notes">
+                    <h4>Gerçek İşlev:</h4>
+                    <ul>
+                        <li><strong>checkIsUsed: true</strong> = Yatırımdan sonra herhangi bir CASINO veya SPOR bahsi yapılmış mı kontrol eder</li>
+                        <li>Eğer yatırımdan sonra bet yapılmışsa: <code>CASINO_BET_AFTER_DEPOSIT</code> veya <code>SPORT_BET_AFTER_DEPOSIT</code> hatası döner</li>
+                        <li>Bu parametre oyuncunun bonus almadan önce oynamaya başlamamış olmasını garantiler</li>
+                        <li><strong>checkIsUsed: false</strong> = Bu kontrol yapılmaz</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>checkPendingBet vs checkIsUsed Farkı</h3>
+                <div class="notes">
+                    <ul>
+                        <li><strong>checkPendingBet</strong>: SADECE açık/bekleyen bahisleri kontrol eder</li>
+                        <li><strong>checkIsUsed</strong>: Son yatırımdan sonra yapılan TÜM bahisleri (kazanmış, kaybetmiş, açık) kontrol eder</li>
+                        <li>Bonus almadan önce oynamamış olma kontrolü için: <code>checkIsUsed: true</code> kullanın</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="bonus-variations">
+            <h2>Bonus Türleri ve Örnekler</h2>
+            {% for key, variation in bonus_variations.items() %}
+            <div class="variation-card">
+                <h3>{{ variation.title }}</h3>
+                <p>{{ variation.description | replace('\n', '<br>') | safe }}</p>
+                
+                {% if variation.notes %}
+                <div class="notes">
+                    <h4>Önemli Notlar:</h4>
+                    <ul>
+                    {% for note in variation.notes %}
+                        <li>{{ note }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="parameters">
+                    <h4>Parametreler:</h4>
+                    {% if variation.parameters %}
+                    <ul>
+                    {% for param in variation.parameters %}
+                        <li><strong>{{ param.name }}</strong>: {{ param.description | replace('\n', '<br>') | safe }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <pre><code class="language-json">{{ variation.example | tojson(indent=2) }}</code></pre>
+                
+                {% if variation.useCases %}
+                <div class="use-cases">
+                    <h4>Kullanım Senaryoları:</h4>
+                    <ul>
+                    {% for case in variation.useCases %}
+                        <li>{{ case }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+
+        <section id="multi-bonus-handling">
+            <h2>🎯 Multi-Bonus Sistemi ve Çakışma Yönetimi</h2>
+            
+            <div class="feature-card">
+                <h3>Öncelik Sistemi (Priority System)</h3>
+                <p>Birden fazla bonus uygun olduğunda hangi bonusun seçileceğini belirler. Yüksek öncelik değeri = daha önemli bonus.</p>
+                
+                <div class="example">
+                    <h4>Örnek Kullanım:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24095,
+            "priority": 20,  // En yüksek öncelik
+            "value": {...}
+        },
+        {
+            "id": 24096, 
+            "priority": 15,  // Düşük öncelik
+            "value": {...}
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Öncelik Seviyeleri:</h4>
+                    <ul>
+                        <li><strong>20-25:</strong> Kritik bonuslar (kayıp telafisi, VIP)</li>
+                        <li><strong>15-19:</strong> Yüksek değer (hoşgeldin, ilk yatırım)</li>
+                        <li><strong>10-14:</strong> Orta seviye (günlük, haftalık)</li>
+                        <li><strong>5-9:</strong> Düşük değer (freespin, küçük ödüller)</li>
+                        <li><strong>0:</strong> Varsayılan (öncelik belirtilmemiş)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Bonus Grupları (Bonus Groups)</h3>
+                <p>Aynı gruptan sadece bir bonus alınabilir. Grup içindeki en yüksek öncelikli bonus seçilir.</p>
+                
+                <div class="example">
+                    <h4>Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24095,
+            "priority": 20,
+            "bonusGroup": "dailyDeposit",  // Aynı grup
+            "value": {...}
+        },
+        {
+            "id": 24096,
+            "priority": 15,
+            "bonusGroup": "dailyDeposit",  // Aynı grup - sadece 24095 seçilir
+            "value": {...}
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Karşılıklı Dışlama (Mutual Exclusion)</h3>
+                <p>Belirli bonusların birlikte alınamayacağını tanımlar.</p>
+                
+                <div class="example">
+                    <h4>Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24095,
+            "priority": 20,
+            "mutuallyExclusive": [24096, 24097],  // Bu bonuslarla birleştirilemez
+            "value": {...}
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Bonus Bağımlılıkları (Dependencies)</h3>
+                <p>Bazı bonuslar için önce başka bonusların alınması gerekir.</p>
+                
+                <div class="example">
+                    <h4>Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24097,
+            "priority": 15,
+            "requiredBonuses": [24098],  // Önce 24098 bonusu alınmalı
+            "value": {...}
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="deposit-timing">
+            <h2>📅 Yatırım Zamanlaması Kontrolleri</h2>
+            
+            <div class="feature-card">
+                <h3>Günün İlk Yatırımı Bonusu</h3>
+                <p>Kullanıcının o gün yaptığı ilk yatırım için bonus verir.</p>
+                
+                <div class="example">
+                    <h4>Kontrol Parametreleri:</h4>
+                    <pre><code class="language-json">
+{
+    "controlParams": [
+        {
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 1,
+                "checkFirstDeposit": false,   // İlk yatırım kontrolü kapalı
+                "checkSecondDeposit": false,  // İkinci yatırım kontrolü kapalı
+                "checkIsUsed": false          // Kullanım kontrolü kapalı
+            }
+        }
+    ],
+    "bonuses": [
+        {
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 1,  // Günlük sıfırlama
+                "resetHour": 0
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Günün İkinci Yatırımı Bonusu</h3>
+                <p>Kullanıcının o gün yaptığı tam olarak ikinci yatırım için bonus verir.</p>
+                
+                <div class="example">
+                    <h4>Kontrol Parametreleri:</h4>
+                    <pre><code class="language-json">
+{
+    "controlParams": [
+        {
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 1,
+                "checkFirstDeposit": false,
+                "checkSecondDeposit": true,   // İkinci yatırım kontrolü aktif
+                "checkIsUsed": false
+            }
+        },
+        {
+            "controlName": "checkDepositCount",
+            "params": {
+                "min": 2  // En az 2 yatırım olmalı
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>İkinci Yatırım Kontrol Mantığı:</h4>
+                    <ul>
+                        <li>O gün tam olarak 2 yatırım yapılmış olmalı</li>
+                        <li>Mevcut yatırım günün 2. yatırımı olmalı</li>
+                        <li>2'den fazla yatırım varsa bonus verilmez</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Yaşam Boyu İlk Yatırım (Hoşgeldin) Bonusu</h3>
+                <p>Kullanıcının hiç yatırım yapmadığı durumda verilen tek seferlik bonus.</p>
+                
+                <div class="example">
+                    <h4>Kontrol Parametreleri:</h4>
+                    <pre><code class="language-json">
+{
+    "controlParams": [
+        {
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 1,
+                "checkFirstDeposit": true,    // İlk yatırım kontrolü aktif
+                "checkSecondDeposit": false,
+                "checkIsUsed": false
+            }
+        },
+        {
+            "controlName": "checkDepositCount",
+            "params": {
+                "max": 1  // Maksimum 1 yatırım olmalı
+            }
+        }
+    ],
+    "bonuses": [
+        {
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": -1  // Hiç sıfırlanmaz
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="yesterday-deposit-bonus">
+            <h2>📅 Dünkü Toplam Yatırım Bonusu (YENİ ÖZELLİK)</h2>
+            
+            <div class="feature-card">
+                <h3>yesterdayTotalDeposit Hesaplama Türü</h3>
+                <p>Kullanıcının dün yaptığı tüm yatırımların toplamı üzerinden bonus hesaplar. Son yatırım yerine günün tüm yatırımlarını dikkate alır.</p>
+                
+                <div class="notes">
+                    <h4>Önemli Özellikler:</h4>
+                    <ul>
+                        <li><strong>Timezone Aware:</strong> Kullanıcının gerçek zamanını dikkate alır</li>
+                        <li><strong>Toplam Hesaplama:</strong> Dünkü tüm yatırımların toplamını alır</li>
+                        <li><strong>Detaylı Logging:</strong> Her yatırım detayını loglar</li>
+                        <li><strong>Saat Aralığı:</strong> Dün 00:00 - 23:59 arası tüm yatırımlar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Günlük Toplam Yatırım Bonusu</h3>
+                <p>Dün toplam 1000+ TL yatırım yapan oyuncular için kademeli FreeSpin bonusu.</p>
+                
+                <div class="example">
+                    <h4>Tam Örnek - FreeSpin Bonusu:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24105,
+            "priority": 20,
+            "bonusGroup": "yesterdayDeposit",
+            "value": {
+                "calculationType": "fixed",
+                "amountCalculation": "yesterdayTotalDeposit",
+                "amount": [
+                    {
+                        "min": 1000,
+                        "max": 3000,
+                        "percentage": 30  // 30 FreeSpin
+                    },
+                    {
+                        "min": 3001,
+                        "max": 7500,
+                        "percentage": 50  // 50 FreeSpin
+                    },
+                    {
+                        "min": 7501,
+                        "max": 12500,
+                        "percentage": 75  // 75 FreeSpin
+                    },
+                    {
+                        "min": 12501,
+                        "max": 25000,
+                        "percentage": 150  // 150 FreeSpin
+                    },
+                    {
+                        "min": 25001,
+                        "max": 50000,
+                        "percentage": 300  // 300 FreeSpin
+                    },
+                    {
+                        "min": 50001,
+                        "max": null,
+                        "percentage": 300  // 300 FreeSpin (maksimum)
+                    }
+                ]
+            },
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 1  // Günlük 1 kez
+            },
+            "conditions": {
+                "activeBonusCheck": true
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkYesterdayTotalDeposit",
+            "params": {
+                "min": 1000  // Minimum 1000 TL toplam yatırım
+            }
+        },
+        {
+            "controlName": "checkTimeRange",
+            "params": {
+                "startHour": 0,  // Gece yarısından
+                "endHour": 3     // Sabah 03:00'e kadar talep edilebilir
+            }
+        },
+        {
+            "controlName": "checkActiveBonusExist",
+            "params": {
+                "hasActiveBonus": false
+            }
+        },
+        {
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 1,
+                "checkIsUsed": false  // Bonus almadan önce oynamamış olma şartı yok
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Örnek Senaryo:</h4>
+                    <ul>
+                        <li><strong>Oyuncu dün yaptığı yatırımlar:</strong> 2000 TL + 1500 TL + 2500 TL = 6000 TL</li>
+                        <li><strong>lastDeposit:</strong> Sadece 2500 TL'yi hesaplar → 30 FS</li>
+                        <li><strong>yesterdayTotalDeposit:</strong> Tüm 6000 TL'yi hesaplar → 50 FS</li>
+                        <li><strong>Bonus talep:</strong> Ertesi gün 00:00-03:00 arası canlı destekten</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>checkYesterdayTotalDeposit Kontrol Fonksiyonu</h3>
+                <p>Dünkü toplam yatırım miktarını kontrol eden yeni kontrol fonksiyonu.</p>
+                
+                <div class="example">
+                    <h4>Kontrol Parametreleri:</h4>
+                    <pre><code class="language-json">
+{
+    "controlName": "checkYesterdayTotalDeposit",
+    "params": {
+        "min": 1000,    // Minimum toplam yatırım (zorunlu değil)
+        "max": 100000   // Maksimum toplam yatırım (opsiyonel)
+    }
+}
+                    </code></pre>
+                </div>
+
+                <div class="notes">
+                    <h4>Kontrol Mantığı:</h4>
+                    <ul>
+                        <li>Kullanıcının gerçek zamanına göre dünü hesaplar</li>
+                        <li>Sadece onaylanmış yatırımları (Status=8) dikkate alır</li>
+                        <li>Timezone farkını otomatik hesaplar</li>
+                        <li>Her yatırımın detayını loglara yazar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Loglardan Takip</h3>
+                <p>yesterdayTotalDeposit kullanıldığında aşağıdaki logları göreceksiniz:</p>
+                
+                <div class="example">
+                    <pre><code class="language-text">
+Bonus Amount Control - ID: 24105, Type: fixed, Calculation: yesterdayTotalDeposit
+Using yesterdayTotalDeposit calculation
+Yesterday's Total Deposits: 6000 TL from 2 deposits
+Deposit 1: 2000 TL at 2025-07-19T20:48:23 (ID: 216783936)
+Deposit 2: 4000 TL at 2025-07-19T21:43:15 (ID: 216783937)
+Found matching range: 3001-7500 for amount 6000
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="loss-bonus-advanced">
+            <h2>💰 Gelişmiş Kayıp Bonusu Sistemi</h2>
+            
+            <div class="feature-card">
+                <h3>Günlük Kayıp Bonusu</h3>
+                <p>Son 24 saatteki net kayıp üzerinden hesaplanan bonus.</p>
+                
+                <div class="example">
+                    <h4>Tam Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24031,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "loss",
+                "amount": [
+                    {
+                        "min": 100,
+                        "max": 9999,
+                        "percentage": 20
+                    },
+                    {
+                        "min": 10000,
+                        "max": 19999,
+                        "percentage": 25
+                    },
+                    {
+                        "min": 20000,
+                        "max": null,
+                        "percentage": 30
+                    }
+                ],
+                "minDiff": 100,  // Minimum 100 TL kayıp
+                "maxDiff": null
+            },
+            "usage": {
+                "maxUses": -1,
+                "resetDayCount": 1,
+                "resetHour": 0
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkCurrentBalance",
+            "params": {
+                "max": 1  // Bakiye 1 TL'den az olmalı
+            }
+        },
+        {
+            "controlName": "checkLastDeposit",
+            "params": {
+                "days": 30,  // Son 30 gündeki yatırımları kontrol et
+                "min": 100,
+                "checkIsUsed": false
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Aylık Kayıp Bonusu</h3>
+                <p>Son 30 gündeki toplam net kayıp üzerinden hesaplanan büyük bonus.</p>
+                
+                <div class="example">
+                    <h4>Tam Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 24108,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "loss",
+                "amount": [
+                    {
+                        "min": 25000,
+                        "max": null,
+                        "percentage": 5
+                    }
+                ],
+                "minDiff": 25000,  // Minimum 25,000 TL kayıp
+                "max": 10000       // Maksimum 10,000 TL bonus
+            },
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 30,  // Aylık sıfırlama
+                "resetHour": 0
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkCurrentBalance",
+            "params": {
+                "max": 100
+            }
+        },
+        {
+            "controlName": "checkActiveBonusExist",
+            "params": {
+                "hasActiveBonus": false
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Aylık Kayıp Bonusu Özellikleri:</h4>
+                    <ul>
+                        <li>Son 30 gündeki tüm yatırım-çekim hesaplanır</li>
+                        <li>Minimum 25,000 TL net kayıp şartı</li>
+                        <li>%5 oranında bonus verilir</li>
+                        <li>Maksimum 10,000 TL bonus limiti</li>
+                        <li>Ayda bir kez alınabilir</li>
+                        <li>Canlı destek üzerinden talep edilir</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="advanced-features">
+            <h2>🚀 Gelişmiş Özellikler</h2>
+            
+            <div class="feature-card">
+                <h3>Kademeli Bonus Sistemi</h3>
+                <p>Yatırım miktarına göre farklı bonus oranları.</p>
+                
+                <div class="example">
+                    <pre><code class="language-json">
+{
+    "value": {
+        "calculationType": "fixed",
+        "amountCalculation": "lastDeposit",
+        "amount": [
+            {"min": 1000, "max": 2499, "percentage": 10},
+            {"min": 2500, "max": 4999, "percentage": 25},
+            {"min": 5000, "max": 9999, "percentage": 30},
+            {"min": 10000, "max": null, "percentage": 50}
+        ]
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Bonus Filtreleme</h3>
+                <p>Önceki bonusları hesaplamaya dahil etmeme veya sadece belirli bonusları dahil etme.</p>
+                
+                <div class="example">
+                    <pre><code class="language-json">
+{
+    "value": {
+        "FilterAllowedBonusses": [24031, 24095],  // Sadece bu bonuslar dahil
+        "FilterReverse": true  // true: Sadece listedekiler, false: Listedekiler hariç
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Zaman Aralığı Kontrolü</h3>
+                <p>Bonusun sadece belirli saatlerde alınabilmesi.</p>
+                
+                <div class="example">
+                    <pre><code class="language-json">
+{
+    "controlParams": [
+        {
+            "controlName": "checkTimeRange",
+            "params": {
+                "startHour": 14,  // 14:00'dan itibaren
+                "endHour": 20     // 20:00'e kadar
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="kombine-kupon-sigorta">
+            <h2>🎯 Kombine Kupon Sigortası (YENİ)</h2>
+            <div class="feature-highlight">
+                <p>4-8 maçlık kombine kuponlarda tek maç kaybında kupon bedelinin belirli yüzdesini nakit iade eden sigorta sistemi.</p>
+            </div>
+
+            <h3>Sigorta Şartları</h3>
+            <ul>
+                <li><strong>Maç Sayısı:</strong> 4-8 maç arası kombine kuponlar</li>
+                <li><strong>Minimum Oran:</strong> Tüm maçlar minimum 1.50 oran</li>
+                <li><strong>Minimum Kupon Bedeli:</strong> En az 100 TL</li>
+                <li><strong>Kaybolan Maç:</strong> Sadece 1 maç kaybetmiş olmalı</li>
+                <li><strong>Kazanan Maç:</strong> En az 3 maç kazanmış olmalı</li>
+                <li><strong>Sistem Kuponu:</strong> Geçersiz (sadece kombine)</li>
+                <li><strong>İadeli Bahis:</strong> Geçersiz</li>
+                <li><strong>Talep Süresi:</strong> 48 saat içinde talep edilmeli</li>
+            </ul>
+
+            <h3>İade Oranları</h3>
+            <table>
+                <tr><th>Maç Sayısı</th><th>İade Oranı</th></tr>
+                <tr><td>4 Maç</td><td>%20</td></tr>
+                <tr><td>5 Maç</td><td>%30</td></tr>
+                <tr><td>6 Maç</td><td>%40</td></tr>
+                <tr><td>7 Maç</td><td>%50</td></tr>
+                <tr><td>8+ Maç</td><td>%100</td></tr>
+            </table>
+
+            <h3>Limitler</h3>
+            <ul>
+                <li><strong>Günlük Limit:</strong> Kullanıcı başına günde 1 bonus</li>
+                <li><strong>Maksimum Bonus:</strong> 5.000 TL</li>
+                <li><strong>Talep Süresi:</strong> 48 saat içinde talep edilmeli</li>
+            </ul>
+
+            <h3>Kullanım Örneği</h3>
+            <div class="example">
+                <pre><code class="language-json">
+{
+    "userid": "24493407",
+    "loadBonus": true,
+    "realTime": "2025-07-27T01:12:37",
+    "realTimeZone": 3,
+    "bonuses": [
+        {
+            "id": 9999,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "kombineKuponLoss",
+                "amount": [
+                    {"minMatches": 4, "maxMatches": 4, "percentage": 20},
+                    {"minMatches": 5, "maxMatches": 5, "percentage": 30},
+                    {"minMatches": 6, "maxMatches": 6, "percentage": 40},
+                    {"minMatches": 7, "maxMatches": 7, "percentage": 50},
+                    {"minMatches": 8, "maxMatches": 999, "percentage": 100}
+                ],
+                "maxAmount": 5000,
+                "requestTimeLimitHours": 48
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkKombineKuponSigorta",
+            "params": {
+                "days": 7,
+                "minMatches": 4,
+                "maxMatches": 8,
+                "minOdds": 1.5,
+                "minBetAmount": 100,
+                "maxBonusAmount": 5000,
+                "requestTimeLimitHours": 48
+            }
+        }
+    ]
+}
+                </code></pre>
+            </div>
+
+            <h3>Hata Kodları</h3>
+            <table>
+                <tr><th>Kod</th><th>Mesaj</th><th>Açıklama</th></tr>
+                <tr><td>8501</td><td>Belirtilen tarih aralığında spor bahsi bulunamadı</td><td>Kullanıcının uygun spor bahsi yok</td></tr>
+                <tr><td>8502</td><td>Kombine kupon sigortası şartlarını sağlayan bahis bulunamadı</td><td>Şartları karşılayan kupon yok</td></tr>
+                <tr><td>8503</td><td>Günlük kombine kupon bonus limitini aştınız</td><td>Günlük limit aşıldı</td></tr>
+                <tr><td>8504</td><td>Kombine kupon sigortası için uygunsunuz</td><td>Bonus için uygun</td></tr>
+                <tr><td>8505</td><td>Kombine kupon sigortası 48 saat içinde talep edilmelidir</td><td>Zaman aşımı</td></tr>
+            </table>
+
+            <h3>Parametreler</h3>
+            <table>
+                <tr><th>Parametre</th><th>Tip</th><th>Varsayılan</th><th>Açıklama</th></tr>
+                <tr><td>days</td><td>int</td><td>7</td><td>Geriye dönük kaç gün kontrol edilecek</td></tr>
+                <tr><td>minMatches</td><td>int</td><td>4</td><td>Minimum maç sayısı</td></tr>
+                <tr><td>maxMatches</td><td>int</td><td>8</td><td>Maximum maç sayısı</td></tr>
+                <tr><td>minOdds</td><td>float</td><td>1.5</td><td>Minimum oran şartı</td></tr>
+                <tr><td>minBetAmount</td><td>float</td><td>100</td><td>Minimum kupon bedeli (TL)</td></tr>
+                <tr><td>maxBonusAmount</td><td>float</td><td>5000</td><td>Maximum bonus tutarı (TL)</td></tr>
+                <tr><td>requestTimeLimitHours</td><td>int</td><td>48</td><td>Talep süresi (saat)</td></tr>
+            </table>
+        </section>
+
+        <section id="super-fanatik-bonus">
+            <h2>🏆 Super Fanatik Haftalık Bonus (YENİ)</h2>
+            <div class="feature-highlight">
+                <p>Haftanın 7 günü her gün minimum 1000 TL yatırım yapan kullanıcılara haftalık yatırım ortalaması kadar bonus verir.</p>
+            </div>
+
+            <h3>Bonus Şartları</h3>
+            <ul>
+                <li><strong>Haftalık Periyod:</strong> Pazartesi 00:01 - Pazar 22:00</li>
+                <li><strong>Günlük Minimum:</strong> Her gün en az 1000 TL yatırım</li>
+                <li><strong>Gerekli Gün:</strong> 7 gün boyunca eksiklisiz yatırım</li>
+                <li><strong>Bonus Hesaplama:</strong> Haftalık toplam ÷ 7 = bonus miktarı</li>
+                <li><strong>Aktivasyon:</strong> Pazar 22:00'dan sonra</li>
+                <li><strong>Talep Süresi:</strong> Salı 23:59'a kadar</li>
+            </ul>
+
+            <h3>Bonus Özellikleri</h3>
+            <ul>
+                <li><strong>Maksimum Bonus:</strong> 10.000 TL</li>
+                <li><strong>Çevrim Şartı:</strong> 40x (sadece casino oyunları)</li>
+                <li><strong>Maksimum Kazanç:</strong> Bonus miktarının 10 katı</li>
+                <li><strong>Oyun Kısıtlaması:</strong> Spor bahislerinde geçerli değil</li>
+                <li><strong>Diğer Bonuslar:</strong> Aynı anda kullanılabilir</li>
+            </ul>
+
+            <h3>Örnek Hesaplama</h3>
+            <table>
+                <tr><th>Gün</th><th>Yatırım (TL)</th></tr>
+                <tr><td>Pazartesi</td><td>2.000</td></tr>
+                <tr><td>Salı</td><td>1.500</td></tr>
+                <tr><td>Çarşamba</td><td>3.000</td></tr>
+                <tr><td>Perşembe</td><td>1.000</td></tr>
+                <tr><td>Cuma</td><td>2.500</td></tr>
+                <tr><td>Cumartesi</td><td>4.000</td></tr>
+                <tr><td>Pazar</td><td>1.200</td></tr>
+                <tr><td><strong>Toplam</strong></td><td><strong>15.200 TL</strong></td></tr>
+                <tr><td><strong>Ortalama (÷7)</strong></td><td><strong>2.171 TL</strong></td></tr>
+                <tr><td><strong>Bonus</strong></td><td><strong>2.171 TL</strong></td></tr>
+            </table>
+
+            <h3>Kullanım Örneği</h3>
+            <div class="example">
+                <pre><code class="language-json">
+{
+    "userid": "24493407",
+    "loadBonus": true,
+    "realTime": "2025-07-28T22:30:00",
+    "realTimeZone": 3,
+    "bonuses": [
+        {
+            "id": 10001,
+            "value": {
+                "calculationType": "fixed",
+                "amountCalculation": "superFanatikAverage",
+                "maxAmount": 10000,
+                "bonusType": "cash_bonus",
+                "hasWager": true,
+                "wagerMultiplier": 40,
+                "maxWinMultiplier": 10,
+                "gameRestrictions": {
+                    "allowedGames": ["casino"],
+                    "excludedGames": ["sports"]
+                }
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkSuperFanatikBonus",
+            "params": {
+                "minDailyDeposit": 1000,
+                "maxBonusAmount": 10000,
+                "requiredDays": 7
+            }
+        }
+    ]
+}
+                </code></pre>
+            </div>
+
+            <h3>Hata Kodları</h3>
+            <table>
+                <tr><th>Kod</th><th>Mesaj</th><th>Açıklama</th></tr>
+                <tr><td>8601</td><td>Super Fanatik bonusu Pazar 22:00'dan sonra talep edilebilir</td><td>Henüz aktivasyon zamanı gelmedi</td></tr>
+                <tr><td>8602</td><td>Super Fanatik bonusu Salı 23:59'a kadar talep edilmelidir</td><td>Talep süresi doldu</td></tr>
+                <tr><td>8603</td><td>Bu hafta hiç yatırım bulunmamaktadır</td><td>Haftalık yatırım yok</td></tr>
+                <tr><td>8604</td><td>Günlük minimum yatırım şartı sağlanmamış</td><td>Bir güne ait yatırım yetersiz</td></tr>
+                <tr><td>8605</td><td>Eksik günler var</td><td>Bazı günlerde yatırım yapılmamış</td></tr>
+                <tr><td>8606</td><td>Bu hafta Super Fanatik bonusunu zaten aldınız</td><td>Haftalık limit aşıldı</td></tr>
+                <tr><td>8607</td><td>Super Fanatik bonusu için uygunsunuz</td><td>Bonus almaya uygun</td></tr>
+            </table>
+
+            <h3>Parametreler</h3>
+            <table>
+                <tr><th>Parametre</th><th>Tip</th><th>Varsayılan</th><th>Açıklama</th></tr>
+                <tr><td>minDailyDeposit</td><td>float</td><td>1000</td><td>Günlük minimum yatırım tutarı (TL)</td></tr>
+                <tr><td>maxBonusAmount</td><td>float</td><td>10000</td><td>Maksimum bonus tutarı (TL)</td></tr>
+                <tr><td>requiredDays</td><td>int</td><td>7</td><td>Gerekli gün sayısı</td></tr>
+            </table>
+        </section>
+
+        <section id="usage-examples">
+            <h2>Kullanım Örnekleri</h2>
+            {% for key, example in usage_examples.items() %}
+            <div class="example-card">
+                <h3>{{ example.title }}</h3>
+                <p>{{ example.description | replace('\n', '<br>') | safe }}</p>
+                
+                {% if example.notes %}
+                <div class="notes">
+                    <h4>Önemli Notlar:</h4>
+                    <ul>
+                    {% for note in example.notes %}
+                        <li>{{ note }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <pre><code class="language-json">{{ example.example | tojson(indent=2) }}</code></pre>
+            </div>
+            {% endfor %}
+        </section>
+
+        <section id="controls">
+            <h2>Mevcut Kontroller</h2>
+            {% for name, control in controls.items() %}
+            <div class="control-card">
+                <h3>{{ name }}</h3>
+                <p>{{ control.description | replace('\n', '<br>') | safe }}</p>
+                
+                {% if control.parameters %}
+                <h4>Parametreler:</h4>
+                <table>
+                    <tr>
+                        <th>İsim</th>
+                        <th>Tip</th>
+                        <th>Zorunlu</th>
+                        <th>Varsayılan</th>
+                        <th>Açıklama</th>
+                    </tr>
+                    {% for param in control.parameters %}
+                    <tr>
+                        <td>{{ param.name }}</td>
+                        <td>{{ param.type }}</td>
+                        <td>{{ "Evet" if param.required else "Hayır" }}</td>
+                        <td>{{ param.default if param.default != None else "-" }}</td>
+                        <td>{{ param.description | replace('\n', '<br>') | safe if param.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+
+                {% if control.examples %}
+                <div class="examples">
+                    <h4>Örnek Kullanımlar:</h4>
+                    {% for example in control.examples %}
+                    <div class="example">
+                        <h5>{{ example.title }}</h5>
+                        <pre><code class="language-json">{{ example.code | tojson(indent=2) }}</code></pre>
+                        <p>{{ example.description | replace('\n', '<br>') | safe }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

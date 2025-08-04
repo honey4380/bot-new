@@ -1,0 +1,580 @@
+{
+    "GENERAL_SUCCESS": {
+        "code": 1000,
+        "message": "İşlem başarılı."
+    },
+    
+    
+    "BALANCE_OVER": {
+        "code": 2001,
+        "message": "Mevcut bakiye {currentBalance}'den büyük: {max}."
+    },
+    "BALANCE_UNDER": {
+        "code": 2002,
+        "message": "Mevcut bakiye {currentBalance}'den küçük: {min}."
+    },
+    "CURRENT_BALANCE_OK": {
+        "code": 2003,
+        "message": "Mevcut bakiye {currentBalance} ve belirlenen aralıkta."
+    },
+    
+    
+    "PROFIT_OVER": {
+        "code": 3001,
+        "message": "Belirtilen kar limitini aştınız. Kar farkı: {diff}."
+    },
+    "PROFIT_UNDER": {
+        "code": 3002,
+        "message": "Minimum kar şartını sağlamıyorsunuz. Kar farkı: {diff}."
+    },
+    "NOT_PROFIT": {
+        "code": 3003,
+        "message": "Zararda olduğunuz için bonus alamazsınız. Fark: {diff}."
+    },
+    "LOSS_OVER": {
+        "code": 3011,
+        "message": "Belirtilen zarar limitini aştınız. Zarar farkı: {diff}."
+    },
+    "LOSS_UNDER": {
+        "code": 3012,
+        "message": "Minimum zarar şartını sağlamıyorsunuz. Zarar farkı: {diff}."
+    },
+    "NOT_LOSS": {
+        "code": 3013,
+        "message": "Karda olduğunuz için bonus alamazsınız. Fark: {diff}."
+    },
+    "PROFIT_OK": {
+        "code": 3101,
+        "message": "Kar farkı: {diff}."
+    },
+    "LOSS_OK": {
+        "code": 3102,
+        "message": "Zarar farkı: {diff}."
+    },
+    "NO_PROFIT_LOSS": {
+        "code": 3103,
+        "message": "Kullanıcı karlı veya zararda değil."
+    },
+    "PROFIT_DIFF": {
+        "code": 3104,
+        "message": "Kar farkı {profitDiff}."
+    },
+    "LOSS_DIFF": {
+        "code": 3105,
+        "message": "Zarar farkı {profitDiff}."
+    },
+    "USER_NOT_PROFITABLE": {
+        "code": 3106,
+        "message": "Kullanıcı karda değil. Fark: {diff}."
+    },
+    "USER_NOT_AT_LOSS": {
+        "code": 3107,
+        "message": "Kullanıcı zararda değil. Fark: {diff}."
+    },
+    "NO_LOSS": {
+        "code": 3108,
+        "message": "Kullanıcı zararda değil."
+    },
+    "NO_PROFIT": {
+        "code": 3109,
+        "message": "Kullanıcı karda değil."
+    },
+    "PROFIT_UNDER_MIN": {
+        "code": 3201,
+        "message": "Toplam kontrol edildiğinde {totalControlDiff} zarardasınız. Minimum gereken kar ({minDiff}) düşük."
+    },
+    "PROFIT_OVER_MAX": {
+        "code": 3202,
+        "message": "Toplam kontrol edilen kar {totalControlDiff}, maksimum izin verilen kardan ({maxDiff}) yüksek."
+    },
+    "LOSS_UNDER_MIN": {
+        "code": 3203,
+        "message": "Toplam kontrol edildiğinde {totalControlDiff} kardasınız. Minimum gereken zarardan ({minDiff}) düşük."
+    },
+    "LOSS_OVER_MAX": {
+        "code": 3204,
+        "message": "Toplam kontrol edilen zarar {totalControlDiff}, maksimum izin verilen zarardan ({maxDiff}) yüksek."
+    },
+    "PROFIT_CONTROL_OK": {
+        "code": 3205,
+        "message": "Kar/zarar kontrolü başarılı. Sonuç: {profitResult}."
+    },
+    
+
+    "NO_BET": {
+        "code": 4001,
+        "message": "Belirlenen gün aralığında bet bulunmamakta."
+    },
+    "BET_PRESENT": {
+        "code": 4002,
+        "message": "Belirlenen gün aralığında bet bulunmakta."
+    },
+    "NO_PENDING_BET": {
+        "code": 4003,
+        "message": "Belirlenen gün aralığında bekleyen bahis bulunmamaktadır."
+    },
+    "PENDING_BET": {
+        "code": 4004,
+        "message": "Belirlenen gün aralığında bekleyen bahis bulunmaktadır."
+    },
+    
+
+    "USER_REGISTER_OK": {
+        "code": 5001,
+        "message": "Kullanıcı belirlenen gün aralığında."
+    },
+    "USER_REGISTER_NOT_OK": {
+        "code": 5002,
+        "message": "Kullanıcı belirlenen gün aralığında değil. Kayıt tarihi: {registerDate}."
+    },
+    "USER_REGISTERED_IN_RANGE": {
+        "code": 5003,
+        "message": "Kullanıcı belirlenen gün aralığında kayıtlı."
+    },
+    "USER_NOT_REGISTERED_IN_RANGE": {
+        "code": 5004,
+        "message": "Kullanıcının kayıt tarihi belirlenen gün aralığında değil: {registerDate}."
+    },
+    "USER_INFO_ERROR": {
+        "code": 5058,
+        "message": "Kullanıcı bilgileri alınamadı. Lütfen daha sonra tekrar deneyin."
+    },
+    
+
+    "NO_DEPOSIT": {
+        "code": 6001,
+        "message": "Belirlenen gün aralığında yatırım yapılmamış."
+    },
+    "DEPOSIT_EXIST": {
+        "code": 6002,
+        "message": "Belirlenen gün aralığında yatırım yapılmış."
+    },
+    "MULTIPLE_DEPOSITS": {
+        "code": 6003,
+        "message": "Birden fazla yatırım tespit edildi. Bu bonus sadece ilk yatırım için geçerli."
+    },
+    "DEPOSIT_AMOUNT_OVER": {
+        "code": 6004,
+        "message": "Son yatırım miktarı {max}'den büyük: {lastDepositAmount}."
+    },
+    "DEPOSIT_AMOUNT_UNDER": {
+        "code": 6005,
+        "message": "Son yatırım miktarı {min}'den küçük: {lastDepositAmount}."
+    },
+    "NO_DEPOSIT_IN_RANGE": {
+        "code": 6006,
+        "message": "Belirlenen gün aralığında yatırım bulunmamaktadır."
+    },
+    "DEPOSIT_IN_RANGE": {
+        "code": 6007,
+        "message": "Belirlenen gün aralığında yatırım yapılmıştır."
+    },
+    "DEPOSIT_OVER": {
+        "code": 6008,
+        "message": "Son yatırım miktarı {max}'den büyük: {lastDepositAmount}."
+    },
+    "DEPOSIT_UNDER": {
+        "code": 6009,
+        "message": "Son yatırım miktarı {min}'den küçük: {lastDepositAmount}."
+    },
+    "CASINO_BET_AFTER_DEPOSIT": {
+        "code": 6011,
+        "message": "Son yatırımdan sonra casino bahsi yapılmıştır. Bakiye kullanıldığı için bonus alamazsınız."
+    },
+    "SPORT_BET_AFTER_DEPOSIT": {
+        "code": 6012,
+        "message": "Son yatırımdan sonra spor bahsi yapılmıştır. Bakiye kullanıldığı için bonus alamazsınız."
+    },
+    "BEFORE_BALANCE_UNDER": {
+        "code": 6013,
+        "message": "Son yatırım öncesi bakiye {reqBeforeBalance}'den düşük: En az {beforeBalanceMin} olmalıydı."
+    },
+    "DEPOSIT_AMOUNT_DIFF": {
+        "code": 6014,
+        "message": "Son yatırım miktarı {lastDepositAmount}."
+    },
+    "DEPOSIT_AMOUNT_OK": {
+        "code": 6015,
+        "message": "Son yatırım miktarı {lastDepositAmount} uygundur."
+    },
+    "BEFORE_BALANCE_OVER": {
+        "code": 6016,
+        "message": "Son yatırım öncesi bakiye {reqBeforeBalance}'den büyük: En fazla {beforeBalanceMax} olmalıydı."
+    },
+    "FIRST_DEPOSIT_OK": {
+        "code": 6017,
+        "message": "İlk yatırım miktarı {lastDepositAmount} uygundur."
+    },
+    "SECOND_DEPOSIT_OK": {
+        "code": 6018,
+        "message": "Günün ikinci yatırım miktarı {lastDepositAmount} uygundur."
+    },
+    "NOT_SECOND_DEPOSIT_OF_DAY": {
+        "code": 6019,
+        "message": "Bu bonus günün ikinci yatırımı için geçerlidir. Bugünkü yatırım sayısı: {depositCount}."
+    },
+    "MORE_THAN_TWO_DEPOSITS_TODAY": {
+        "code": 6020,
+        "message": "Bugün 2'den fazla yatırım tespit edildi ({depositCount} yatırım). Bu bonus sadece günün ikinci yatırımı için geçerlidir."
+    },
+    "NOT_CURRENT_SECOND_DEPOSIT": {
+        "code": 6021,
+        "message": "Mevcut yatırım günün ikinci yatırımı değil. Bu bonus sadece günün ikinci yatırımında geçerlidir."
+    },
+    "NO_DEPOSIT_FOUND": {
+        "code": 6023,
+        "message": "Son yatırım bulunamadı."
+    },
+    "DEPOSIT_METHOD_ALLOWED": {
+        "code": 6024,
+        "message": "Son yatırım yöntemi seçili yöntemler içerisinde bulunuyor: {depositPaymentSystemName}."
+    },
+    "DEPOSIT_METHOD_NOT_ALLOWED": {
+        "code": 6025,
+        "message": "Son yatırım yöntemi izin verilenler arasında: {depositPaymentSystemName}."
+    },
+    "DEPOSIT_METHOD_VALID": {
+        "code": 6022,
+        "message": "Son yatırım yöntemi uygun. ({actual})"
+    },
+    "DEPOSIT_COUNT_ERROR": {
+        "code": 6035,
+        "message": "Yatırım sayısı hatalı."
+    },
+    "DEPOSIT_COUNT_NOT_EQUAL": {
+        "code": 6037,
+        "message": "Yatırım sayısı {depositCount} beklenen {max} ile eşleşmiyor."
+    },
+    "DEPOSIT_COUNT_OVER": {
+        "code": 6038,
+        "message": "Yatırım sayısı {depositCount} izin verilen maksimum {max} sınırını aşıyor."
+    },
+    "DEPOSIT_COUNT_UNDER": {
+        "code": 6039,
+        "message": "Yatırım sayısı {depositCount} izin verilen minimum {min} sınırının altında."
+    },
+    "DEPOSIT_COUNT_OK": {
+        "code": 6040,
+        "message": "Yatırım sayısı {depositCount} uygun."
+    },
+    "DEPOSIT_COUNT_EQUAL": {
+        "code": 6057,
+        "message": "Yatırım sayısı {depositCount} beklenen {max} ile eşleşiyor."
+    },
+    "NO_FILTRED_DEPOSIT_IN_RANGE": {
+        "code": 6056,
+        "message": "Bonus alınmamış yatırım bulunamadı"
+    },
+    "NO_DEPOSIT_IN_HOUR_RANGE": {
+        "code": 6060,
+        "message": "Belirlenen saat aralığında yatırım bulunmamaktadır."
+    },
+    "NO_DEPOSIT_YESTERDAY": {
+        "code": 6061,
+        "message": "Dünkü tarihte herhangi bir yatırım işlemi bulunamadı."
+    },
+    "YESTERDAY_DEPOSIT_UNDER": {
+        "code": 6062,
+        "message": "Dünkü toplam yatırım miktarı {totalAmount} TL, minimum gerekli miktar {min} TL'den düşük."
+    },
+    "YESTERDAY_DEPOSIT_OVER": {
+        "code": 6063,
+        "message": "Dünkü toplam yatırım miktarı {totalAmount} TL, maksimum izin verilen miktar {max} TL'den yüksek."
+    },
+    "YESTERDAY_DEPOSIT_OK": {
+        "code": 6064,
+        "message": "Dünkü toplam yatırım miktarı {totalAmount} TL ({depositCount} yatırım) uygun."
+    },
+    
+
+    "WITHDRAW_MIN_DIFF_NOT_MET": {
+        "code": 7001,
+        "message": "Son yatırımdan önce en az {minDiff} kadar yatırım yapmalısınız. Fark: {diff}."
+    },
+    "NO_WITHDRAW": {
+        "code": 7002,
+        "message": "Belirlenen gün aralığında çekim yapılmamış."
+    },
+    "WITHDRAW_EXIST": {
+        "code": 7003,
+        "message": "Belirlenen gün aralığında çekim yapılmış."
+    },
+    "DEPOSIT_WITHDRAW_DIFF_UNDER": {
+        "code": 7004,
+        "message": "Son yatırım - (Son {HourCount} saatteki çekim farkı) = {Diff} yani beklenenin altında: En az {controlMinDepositDiff} olmalı."
+    },
+    "NO_WITHDRAW_IN_RANGE": {
+        "code": 7005,
+        "message": "Belirlenen gün aralığında çekim bulunmamaktadır."
+    },
+    "WITHDRAW_IN_RANGE": {
+        "code": 7006,
+        "message": "Belirlenen gün aralığında çekim yapılmıştır."
+    },
+    "DEPOSIT_WITHDRAW_DIFF_OVER": {
+        "code": 7007,
+        "message": "Yatırım ve çekim farkı {Diff} beklenenin üstünde: En fazla {minDepositDiff} olmalı."
+    },
+    "WITHDRAW_COUNT_ERROR": {
+        "code": 7036,
+        "message": "Çekim sayısı hatalı."
+    },
+    "WITHDRAW_COUNT_NOT_EQUAL": {
+        "code": 7041,
+        "message": "Çekim sayısı {withdrawCount} beklenen {maxWithdrawCount} ile eşleşmiyor."
+    },
+    "WITHDRAW_COUNT_OVER": {
+        "code": 7042,
+        "message": "Çekim sayısı {withdrawCount} izin verilen maksimum {maxWithdrawCount} sayısını aşıyor."
+    },
+    "WITHDRAW_COUNT_UNDER": {
+        "code": 7043,
+        "message": "Çekim sayısı {withdrawCount} izin verilen minimum {minWithdrawCount} sayısının altında."
+    },
+    "WITHDRAW_COUNT_OK": {
+        "code": 7044,
+        "message": "Çekim sayısı {withdrawCount} uygun."
+    },
+    "ACTIVE_WITHDRAW": {
+        "code": 7045,
+        "message": "Aktif çekim bulunmakta."
+    },
+    
+    "IP_CONFLICT": {
+        "code": 8001,
+        "message": "IP çakışması bulunmakta."
+    },
+    "DEVICE_CONFLICT": {
+        "code": 8002,
+        "message": "Cihaz çakışması bulunmakta."
+    },
+    "NO_CONFLICT": {
+        "code": 8003,
+        "message": "Çakışma bulunmamaktadır."
+    },
+    
+
+    "BONUS_APPROVED": {
+        "code": 9001,
+        "message": "Bonus almaya uygunsunuz."
+    },
+    "NO_ACTIVE_BONUS": {
+        "code": 9002,
+        "message": "Aktif bonus bulunmamaktadır."
+    },
+    "ACTIVE_BONUS_EXIST": {
+        "code": 9003,
+        "message": "Aktif bonus bulunmakta."
+    },
+    "ACTIVE_BONUS": {
+        "code": 9004,
+        "message": "Şu anda aktif bonusunuz bulunmaktadır. Hoşgeldin bonusu alabilmek için mevcut bonusunuzu tamamlamanız gerekmektedir."
+    },
+    "BONUS_AMOUNT_VALID": {
+        "code": 9101,
+        "message": "Bonus tutarı geçerli."
+    },
+    "BONUS_USAGE_OK": {
+        "code": 9102,
+        "message": "Bonus kullanımı uygun."
+    },
+    "BONUS_CONDITIONS_OK": {
+        "code": 9103,
+        "message": "Bonus şartları uygun."
+    },
+    "BONUS_CHECK_OK": {
+        "code": 9104,
+        "message": "Bonus kontrolü başarılı."
+    },
+    "BONUS_NO_ACTIVE": {
+        "code": 9105,
+        "message": "Kullanıcıya ait bonus bulunamadı."
+    },
+    "BONUS_ADDED": {
+        "code": 9106,
+        "message": "{bonusName} bonusu başarılı bir şekilde eklendi."
+    },
+    "BONUS_UNLIMITED": {
+        "code": 9107,
+        "message": "Sınırsız bonus kullanımı (Amount Kontrolü yapılacak)."
+    },
+    "BONUS_NOT_ADDED": {
+        "code": 9108,
+        "message": "Bonusu şuanda alamıyorsunuz. Detaylar için destek ekibimizle iletişime geçebilirsiniz."
+    },
+    "BONUS_INACTIVE": {
+        "code": 9110,
+        "message": "Bu bonus şuanda aktif değil."
+    },
+    "BONUS_ALREADY_TAKEN": {
+        "code": 9111,
+        "message": "Bonus daha önce tanımlanmış. Başka hakkınız bulunmamakta."
+    },
+    "BONUS_MAX_USAGE": {
+        "code": 9112,
+        "message": "Maksimum bonus kullanım sayısına ulaşıldı."
+    },
+    "BONUS_USAGE_VALID": {
+        "code": 9113,
+        "message": "Bonus kullanımı uygun."
+    },
+    "ACTIVE_BONUS_EXISTS": {
+        "code": 9114,
+        "message": "Şu anda aktif bonusunuz bulunmaktadır. Bu bonus kampanyasından faydalanabilmek için mevcut bonusunuzu tamamlamanız gerekmektedir."
+    },
+    "BONUS_AMOUNT_CALCULATION_ERROR": {
+        "code": 9115,
+        "message": "Son yatırım bulunamadı."
+    },
+    "BONUS_USER_LOSS": {
+        "code": 9116,
+        "message": "Kullanıcı zararda olduğu için bonus alamaz."
+    },
+    "BONUS_USER_PROFIT": {
+        "code": 9117,
+        "message": "Kullanıcı karda olduğu için bonus alamaz."
+    },
+    "BONUS_AMOUNT_RANGE_ERROR": {
+        "code": 9118,
+        "message": "Miktar belirlenen aralıklara uymuyor."
+    },
+    "BONUS_FILTER_RESTRICTED": {
+        "code": 9119,
+        "message": "Bonus filtre kısıtlaması nedeniyle bu bonusu alamazsınız."
+    },
+    "BONUS_AMOUNT_FORMAT_INVALID": {
+        "code": 9130,
+        "message": "Bonus tutarı formatı geçersiz"
+    },
+    "BONUS_MAX_AMOUNT_EXCEEDED": {
+        "code": 9146,
+        "message": "Maksimum bonus miktarı aşıldı."
+    },
+    "BONUS_HOUR_INVALID": {
+        "code": 9148,
+        "message": "Bonus alım saati dışındasınız."
+    },
+    "TIME_RANGE_OK": {
+        "code": 9149,
+        "message": "Zaman aralığı uygun."
+    },
+    "TIME_RANGE_DEF": {
+        "code": 9150,
+        "message": "Zaman aralığı uygun değil. Başlangıç: {startHour}, Bitiş: {endHour}."
+    },
+    "BONUS_BANNED": {
+        "code": 9159,
+        "message": "Bu kategoride bonus alımınız yasaklanmıştır."
+    },
+    "FACTORY_WELCOME_BONUS_ANOTHER_BONUS": {
+        "code": 9163,
+        "message": "Bonus alımından sonra farklı bir bonus alınmış."
+    },
+    "FACTORY_WELCOME_BONUS_WITHDRAWAL": {
+        "code": 9164,
+        "message": "Bonus alımından sonra çekim yapılmış."
+    },
+    
+    "GENERAL_ERROR": {
+        "code": 1999,
+        "message": "Beklenmeyen bir hata oluştu: {errorMessage}."
+    },
+    "DIGI_LOGIN_WAITING": {
+        "code": 10001,
+        "message": "Aktif hesap bulunamadı, aktif hesap bekleniyor"
+    },
+    
+    "NO_SPORT_BETS_FOUND": {
+        "code": 8501,
+        "message": "Belirtilen tarih aralığında spor bahsi bulunamadı."
+    },
+    "NO_ELIGIBLE_KOMBINE_BETS": {
+        "code": 8502,
+        "message": "Kombine kupon sigortası şartlarını sağlayan bahis bulunamadı."
+    },
+    "DAILY_KOMBINE_BONUS_LIMIT_EXCEEDED": {
+        "code": 8503,
+        "message": "Günlük kombine kupon bonus limitini aştınız. Günde sadece 1 kez bonus alabilirsiniz."
+    },
+    "KOMBINE_KUPON_SIGORTA_ELIGIBLE": {
+        "code": 8504,
+        "message": "Kombine kupon sigortası için uygunsunuz. Bonus miktarı: {bonusAmount} TL."
+    },
+    "KOMBINE_KUPON_TIME_LIMIT_EXCEEDED": {
+        "code": 8505,
+        "message": "Kombine kupon sigortası 48 saat içinde talep edilmelidir. Süre dolmuştur."
+    },
+    "SUPER_FANATIK_TIME_NOT_REACHED": {
+        "code": 8601,
+        "message": "Super Fanatik bonusu Pazar 22:00'dan sonra talep edilebilir."
+    },
+    "SUPER_FANATIK_TIME_EXPIRED": {
+        "code": 8602,
+        "message": "Super Fanatik bonusu Salı 23:59'a kadar talep edilmelidir. Süre dolmuştur."
+    },
+    "NO_DEPOSITS_IN_WEEK": {
+        "code": 8603,
+        "message": "Bu hafta hiç yatırım bulunmamaktadır."
+    },
+    "DAILY_DEPOSIT_INSUFFICIENT": {
+        "code": 8604,
+        "message": "{missingDay} günü minimum {requiredAmount} TL yatırım yapılmalıdır. Mevcut: {dailyAmount} TL."
+    },
+    "MISSING_DAILY_DEPOSITS": {
+        "code": 8605,
+        "message": "Şu günlerde yatırım bulunmamaktadır: {missingDays}"
+    },
+    "WEEKLY_SUPER_FANATIK_LIMIT_EXCEEDED": {
+        "code": 8606,
+        "message": "Bu hafta Super Fanatik bonusunu zaten aldınız."
+    },
+    "SUPER_FANATIK_BONUS_ELIGIBLE": {
+        "code": 8607,
+        "message": "Super Fanatik bonusu için uygunsunuz. Haftalık ortalama: {weeklyAverage} TL, Bonus: {bonusAmount} TL."
+    },
+    "WELCOME_BONUS_DEPOSITS_EXCEEDED": {
+        "code": 8701,
+        "message": "Hoşgeldin bonusu maksimum 3 yatırım için geçerlidir. Mevcut yatırım sayınız limitin üzerinde."
+    },
+    "WELCOME_BONUS_COMPLETED": {
+        "code": 8702,
+        "message": "Hoşgeldin bonusunun tüm aşamalarını (3 kullanım) tamamladınız."
+    },
+    "WELCOME_STAGE_DEPOSIT_MISMATCH": {
+        "code": 8703,
+        "message": "Hoşgeldin bonus aşaması uyumsuz. Beklenen aşama: {expectedStage}, mevcut kullanım: {currentStage}."
+    },
+    "WELCOME_LOSS_REQUIRED": {
+        "code": 8704,
+        "message": "Hoşgeldin bonusu {stage}. aşama için kayıp durumunda olmanız gerekir. Mevcut bakiye: {currentBalance} TL."
+    },
+    "WELCOME_STAGE_ELIGIBLE": {
+        "code": 8705,
+        "message": "Hoşgeldin bonusu {stage}. aşama için uygunsunuz. Bonus: {bonusAmount} TL. Kalan hak: {usesRemaining}."
+    },
+    "WELCOME_BONUS_ELIGIBLE": {
+        "code": 8706,
+        "message": "Hoşgeldin bonusu {stage}. aşama için uygunsunuz. Bonus: {bonusAmount} TL. Kalan hak: {remainingUses}."
+    },
+    "WELCOME_BONUS_COMPLETED": {
+        "code": 8707,
+        "message": "Hoşgeldin bonus hakkınız tamamlanmıştır. Toplam kullanım: {totalUses}."
+    },
+    "WITHDRAW_AFTER_DEPOSIT_FOUND": {
+        "code": 8708,
+        "message": "{stage}. aşama için son yatırımdan sonra çekim yapamazsınız. {withdrawCount} çekim bulundu."
+    },
+    "ACTIVE_BONUS_EXISTS": {
+        "code": 8709,
+        "message": "Aktif bonusunuz bulunduğu için yeni bonus alamazsınız."
+    },
+    "PENDING_BET_EXISTS": {
+        "code": 8710,
+        "message": "Beklemede bahsiniz bulunduğu için bonus alamazsınız."
+    },
+    "RECENT_WITHDRAW_EXISTS": {
+        "code": 8711,
+        "message": "Son 24 saat içinde çekim yaptığınız için bonus alamazsınız."
+    }
+
+}

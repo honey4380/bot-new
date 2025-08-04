@@ -1,0 +1,186 @@
+{
+    "deposit_bonus": {
+        "title": "%100 İlk Yatırım Bonusu",
+        "description": "İlk yatırıma özel tek kullanımlık %100 bonus\nSadece yeni üyeler için geçerlidir",
+        "example": {
+            "bonuses": [{
+                "id": 4483,
+                "value": {
+                    "calculationType": "percentage",
+                    "amountCalculation": "lastDeposit",
+                    "amount": [{"min": 100, "max": 1000, "percentage": 100}],
+                    "max": 1000
+                },
+                "usage": {
+                    "maxUses": 1
+                },
+                "conditions": {
+                    "activeBonusCheck": true
+                }
+            }],
+            "controlParams": [{
+                "controlName": "checkLastDeposit",
+                "params": {
+                    "days": 1,
+                    "min": 100,
+                    "checkIsUsed": true,
+                    "checkFirstDeposit": true
+                }
+            }]
+        }
+    },
+    "daily_deposit": {
+        "title": "Günlük Yatırım Bonusu",
+        "description": "Her gün yatırıma özel %20 bonus\nGünlük limitleri olan sürekli bonus",
+        "example": {
+            "id": 4494,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "lastDeposit",
+                "amount": [{"min": 100, "max": 2000, "percentage": 20}],
+                "max": 2000  
+            },
+            "usage": {
+                "maxUses": -1, 
+                "resetDayCount": 1,  
+                "resetHour": 0  
+            },
+            "conditions": {
+                "activeBonusCheck": true
+            }
+        },
+        "notes": [
+            "Her gün tekrar alınabilir",
+            "Gece 00:00'da kullanım hakkı yenilenir",
+            "Minimum 100 TL yatırım gerekli",
+            "Günlük maksimum 2000 TL bonus"
+        ],
+        "controlParams": [
+            {
+                "controlName": "checkLastDeposit",
+                "params": {
+                    "days": 1,
+                    "min": 100,
+                    "checkIsUsed": true,
+                    "beforeBalanceMin": 3
+                }
+            },
+            {
+                "controlName": "checkWithdrawExist",
+                "params": {
+                    "days": 1,
+                    "hasWithdraw": false,
+                    "controlAfterDeposit": true
+                }
+            }
+        ]
+    },
+    "loss_bonus": {
+        "title": "Casino Kayıp Bonusu", 
+        "description": "Günlük casino kayıplarına özel kademeli bonus",
+        "example": {
+            "bonuses": [{
+                "id": 4495,
+                "value": {
+                    "calculationType": "percentage",
+                    "amountCalculation": "loss",
+                    "calculationDate": "2025-02-21T22:05:00",
+                    "minDiff": 20,
+                    "maxDiff": null,
+                    "amount": [
+                        {"min": 20, "max": 9999, "percentage": 20},
+                        {"min": 10000, "max": 19999, "percentage": 25},
+                        {"min": 20000, "max": null, "percentage": 30}
+                    ],
+                    "max": 2000
+                },
+                "usage": {
+                    "maxUses": -1,
+                    "resetDayCount": 1,
+                    "resetHour": 0
+                },
+                "conditions": {
+                    "activeBonusCheck": false
+                }
+            }],
+            "controlParams": [{
+                "controlName": "checkCurrentBalance",
+                "params": {"max": 3}
+            }]
+        }
+    },
+    "profit_bonus": {
+        "title": "Günlük Kar Bonusu",
+        "description": "Günlük kazanca göre verilen kademeli bonus",
+        "example": {
+            "bonuses": [{
+                "id": 4496,
+                "value": {
+                    "calculationType": "percentage",
+                    "amountCalculation": "profit",
+                    "calculationDate": "2025-02-21T22:05:00",
+                    "minDiff": 1000,
+                    "maxDiff": null,
+                    "amount": [
+                        {"min": 1000, "max": 4999, "percentage": 5},
+                        {"min": 5000, "max": 9999, "percentage": 10},
+                        {"min": 10000, "max": null, "percentage": 15}
+                    ],
+                    "max": 5000
+                },
+                "usage": {
+                    "maxUses": -1,
+                    "resetDayCount": 1,
+                    "resetHour": 0
+                },
+                "conditions": {
+                    "activeBonusCheck": true
+                }
+            }],
+            "controlParams": [
+                {
+                    "controlName": "checkProfitCount",
+                    "params": {
+                        "isProfit": true,
+                        "minDiff": 1000
+                    }
+                }
+            ]
+        }
+    },
+    "freespin_bonus": {
+        "title": "Yatırıma Özel Freespin",
+        "description": "Yatırım miktarına göre kademeli freespin",
+        "example": {
+            "bonuses": [{
+                "id": 7241,
+                "value": {
+                    "calculationType": "fixed",
+                    "amountCalculation": "lastDeposit",
+                    "amount": [
+                        {"min": 100, "max": 499, "percentage": 50},
+                        {"min": 500, "max": 999, "percentage": 100},
+                        {"min": 1000, "max": null, "percentage": 150}
+                    ]
+                },
+                "usage": {
+                    "maxUses": 1,
+                    "resetDayCount": 1
+                },
+                "conditions": {
+                    "activeBonusCheck": true
+                }
+            }],
+            "controlParams": [
+                {
+                    "controlName": "checkLastDeposit",
+                    "params": {
+                        "days": 1,
+                        "min": 100,
+                        "checkIsUsed": true
+                    }
+                }
+            ]
+        }
+    }
+}

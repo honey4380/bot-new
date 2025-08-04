@@ -1,0 +1,121 @@
+{
+    "fixed_amount": {
+        "title": "Sabit Miktar Bonus",
+        "description": "Direkt belirli bir miktar bonus verir (örn: 250 TL)\nHerhangi bir hesaplama yapılmadan direkt belirtilen miktar bonus olarak verilir",
+        "parameters": [
+            {
+                "name": "calculationType",
+                "description": "Bonus tipi - 'fixed' olarak ayarlanmalı"
+            },
+            {
+                "name": "amount",
+                "description": "Tek eleman içeren array. percentage değeri direkt bonus miktarını belirtir"
+            }
+        ],
+        "example": {
+            "calculationType": "fixed",
+            "amount": [{"percentage": 250}]
+        },
+        "useCases": [
+            "Hoşgeldin bonusu (250 TL)",
+            "Deneme bonusu (100 TL)",
+            "Doğum günü bonusu (500 TL)"
+        ],
+        "notes": [
+            "amountCalculation zorunlu değildir",
+            "amount array'i tek eleman içermelidir",
+            "min/max değerleri kullanılmaz"
+        ]
+    },
+    "fixed_amount_with_calculation": {
+        "title": "Hesaplamalı Sabit Miktar",
+        "description": "Yatırım, kayıp veya kar miktarına göre farklı sabit bonuslar verir\nÖzellikle freespin bonuslarında kullanılır",
+        "parameters": [
+            {
+                "name": "calculationType",
+                "description": "Bonus tipi - 'fixed' olarak ayarlanmalı"
+            },
+            {
+                "name": "amountCalculation",
+                "description": "Hesaplama yöntemi:\nlastDeposit: Son yatırım miktarına göre\nloss: Kayıp miktarına göre\nprofit: Kar miktarına göre" 
+            },
+            {
+                "name": "calculationDate",
+                "description": "loss/profit hesaplaması için tarih (UTC)\nFormat: YYYY-MM-DDTHH:mm:ss",
+                "required": "loss/profit hesaplaması için zorunlu"
+            },
+            {
+                "name": "minDiff",
+                "description": "Minimum kar/zarar miktarı",
+                "required": "loss/profit hesaplaması için zorunlu"
+            },
+            {
+                "name": "maxDiff", 
+                "description": "Maksimum kar/zarar miktarı (opsiyonel)"
+            }
+        ],
+        "example": {
+            "calculationType": "fixed",
+            "amountCalculation": "loss",
+            "calculationDate": "2025-02-21T22:05:00",
+            "minDiff": 100,
+            "maxDiff": 1000,
+            "amount": [
+                {"min": 100, "max": 499, "percentage": 50},
+                {"min": 500, "max": 999, "percentage": 100},
+                {"min": 1000, "max": null, "percentage": 150}
+            ]
+        }
+    },
+    "percentage_amount": {
+        "title": "Yüzdeli Bonus",
+        "description": "Yatırım, kayıp veya kar miktarının belirli bir yüzdesi kadar bonus verir\nEn yaygın bonus türüdür",
+        "parameters": [
+            {
+                "name": "calculationType",
+                "description": "Bonus tipi - 'percentage' olarak ayarlanmalı"
+            },
+            {
+                "name": "amountCalculation",
+                "description": "Hesaplama yöntemi:\nlastDeposit: Son yatırımın yüzdesi\nloss: Kaybın yüzdesi\nprofit: Karın yüzdesi"
+            },
+            {
+                "name": "calculationDate",
+                "description": "loss/profit hesaplaması için tarih (UTC)",
+                "required": "loss/profit hesaplaması için zorunlu"
+            },
+            {
+                "name": "minDiff",
+                "description": "Minimum kar/zarar miktarı",
+                "required": "loss/profit hesaplaması için zorunlu"  
+            },
+            {
+                "name": "maxDiff",
+                "description": "Maksimum kar/zarar miktarı (opsiyonel)"
+            },
+            {
+                "name": "amount",
+                "description": "Bonus yüzdesi ve limitleri:\nmin/max: İsteğe bağlı limitler\npercentage: Yüzde değeri"
+            },
+            {
+                "name": "max",
+                "description": "Maksimum bonus limiti:\nTek değer veya\nHaftanın günlerine göre [Pzt,Sal,Çar,Per,Cum,Cmt,Paz] farklı limitler"
+            }
+        ],
+        "example": {
+            "calculationType": "percentage",
+            "amountCalculation": "lastDeposit",
+            "amount": [{"min": null, "max": 2000, "percentage": 100}],
+            "max": 2000
+        },
+        "useCases": [
+            "%100 2000 TL Hoşgeldin Bonusu",
+            "%20 Spor Yatırım Bonusu",
+            "%50 Casino Kayıp Bonusu"
+        ],
+        "notes": [
+            "max değeri her zaman belirtilmeli",
+            "amount.percentage 100'den büyük olabilir"
+        ]
+    }
+}
