@@ -4029,3 +4029,121 @@
 2025-08-04 06:24:17 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:24:17] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
 2025-08-04 06:24:18 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:24:18] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
 2025-08-04 06:24:20 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:24:20] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:24:25 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:24:55 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:25:01 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:01] "GET /api/check-token HTTP/1.1" 200 -
+2025-08-04 06:25:01 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:01] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:01 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:01] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:02] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:25:03 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:03] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:03 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:03] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:04 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:04] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:05 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:05] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:07] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:07] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:25:08 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:08] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:08 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:08] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:09] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:10 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:10] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:12 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:12] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:13 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:13] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:13 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:13] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:14] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:16 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:16] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:16 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:16] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:17 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:17] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:25:19 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:19] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:22 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:25:22] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:25:25 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:25:55 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:26:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:02] "GET /api/check-token HTTP/1.1" 200 -
+2025-08-04 06:26:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:02] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:02] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:02] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:26:03 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:03] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:04 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:04] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:05 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:05] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:06 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:06] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:07] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:07] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:26:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:07] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:09] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:09] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:10 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:10] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:11 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:11] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:12 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:12] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:12 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:12] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:14] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:14] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:26:15 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:15] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:17 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:17] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:18 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:18] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:19 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:26:19] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:26:25 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:26:44 - SessionManager - INFO - Hesaplar data/ACCOUNTS.json dosyasından yüklendi
+2025-08-04 06:26:44 - SessionManager - INFO - Toplam 1 hesap bulundu
+2025-08-04 06:26:44 - SessionManager - INFO - Hesaplar başlatılıyor...
+2025-08-04 06:26:44 - SessionManager - INFO - bot.visioniki hesabı için giriş yapılıyor...
+2025-08-04 06:26:45 - SessionManager - INFO - bot.visioniki için mevcut oturum kullanılıyor
+2025-08-04 06:26:45 - SessionManager - INFO - bot.visioniki hesabı başlatıldı
+2025-08-04 06:26:45 - SessionManager - INFO - Token sağlık kontrolü başlatıldı
+2025-08-04 06:26:45 - SessionManager - INFO - SeleniumSessionManager başlatıldı
+2025-08-04 06:26:45 - SessionManager - INFO - bot.visioniki için token alındı
+2025-08-04 06:26:45 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:26:45 - SessionManager - INFO - bot.visioniki için token alındı
+2025-08-04 06:26:45 - ConnectionCleaner - INFO - Flask uygulaması bağlandı.
+2025-08-04 06:26:45 - ConnectionCleaner - INFO - ConnectionCleaner başlatıldı. Platform: Linux, PID: 659369, Port: 2010
+2025-08-04 06:26:45 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2050
+ * Running on http://135.181.236.205:2050
+2025-08-04 06:26:45 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-04 06:27:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:02] "GET /api/check-token HTTP/1.1" 200 -
+2025-08-04 06:27:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:02] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:02] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:02] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:27:03 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:03] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:04 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:04] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:05 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:05] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:06 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:06] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:07] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:27:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:07] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:09] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:09] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:10 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:10] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:12 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:12] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:13 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:13] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:14] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:15 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:15] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:15 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:27:16 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:16] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:17 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:17] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:18 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:18] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:19 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:19] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:27:21 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:21] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:24 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:27:24] "POST /api/getDepositList HTTP/1.1" 200 -
+2025-08-04 06:27:45 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:28:01 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:01] "GET /api/check-token HTTP/1.1" 200 -
+2025-08-04 06:28:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:02] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:02] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:02 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:02] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:28:03 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:03] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:04 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:04] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:05 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:05] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:06 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:06] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:06 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:06] "POST /api/getUserList HTTP/1.1" 200 -
+2025-08-04 06:28:07 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:07] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:08 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:08] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:09 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:09] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:10 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:10] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:11 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:11] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:11 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:11] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:12 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:12] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:13 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:13] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:14] "POST /api/getWithdrawList HTTP/1.1" 200 -
+2025-08-04 06:28:14 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:14] "POST /api/GetSportBetsReport HTTP/1.1" 200 -
+2025-08-04 06:28:15 - SessionManager - INFO - Sağlık kontrolü: 1 aktif, 0 inaktif hesap
+2025-08-04 06:28:15 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:15] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:17 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:17] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:18 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:18] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
+2025-08-04 06:28:20 - werkzeug - INFO - 127.0.0.1 - - [04/Aug/2025 06:28:20] "[35m[1mPOST /api/GetSportBetsReport HTTP/1.1[0m" 204 -
