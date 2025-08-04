@@ -368,7 +368,7 @@
     },
     "ACTIVE_BONUS": {
         "code": 9004,
-        "message": "Şu anda aktif bonusunuz bulunmaktadır. Hoşgeldin bonusu alabilmek için mevcut bonusunuzu tamamlamanız gerekmektedir."
+        "message": "Kullanıcıda aktif bonus bulunmaktadır."
     },
     "BONUS_AMOUNT_VALID": {
         "code": 9101,
@@ -420,7 +420,7 @@
     },
     "ACTIVE_BONUS_EXISTS": {
         "code": 9114,
-        "message": "Şu anda aktif bonusunuz bulunmaktadır. Bu bonus kampanyasından faydalanabilmek için mevcut bonusunuzu tamamlamanız gerekmektedir."
+        "message": "Kullanıcıya ait aktif bonus bulunmakta."
     },
     "BONUS_AMOUNT_CALCULATION_ERROR": {
         "code": 9115,
@@ -476,105 +476,11 @@
     },
     
     "GENERAL_ERROR": {
-        "code": 1999,
-        "message": "Beklenmeyen bir hata oluştu: {errorMessage}."
+        "code": 10000,
+        "message": "Hata: {errorMessage}"
     },
     "DIGI_LOGIN_WAITING": {
         "code": 10001,
         "message": "Aktif hesap bulunamadı, aktif hesap bekleniyor"
-    },
-    
-    "NO_SPORT_BETS_FOUND": {
-        "code": 8501,
-        "message": "Belirtilen tarih aralığında spor bahsi bulunamadı."
-    },
-    "NO_ELIGIBLE_KOMBINE_BETS": {
-        "code": 8502,
-        "message": "Kombine kupon sigortası şartlarını sağlayan bahis bulunamadı."
-    },
-    "DAILY_KOMBINE_BONUS_LIMIT_EXCEEDED": {
-        "code": 8503,
-        "message": "Günlük kombine kupon bonus limitini aştınız. Günde sadece 1 kez bonus alabilirsiniz."
-    },
-    "KOMBINE_KUPON_SIGORTA_ELIGIBLE": {
-        "code": 8504,
-        "message": "Kombine kupon sigortası için uygunsunuz. Bonus miktarı: {bonusAmount} TL."
-    },
-    "KOMBINE_KUPON_TIME_LIMIT_EXCEEDED": {
-        "code": 8505,
-        "message": "Kombine kupon sigortası 48 saat içinde talep edilmelidir. Süre dolmuştur."
-    },
-    "SUPER_FANATIK_TIME_NOT_REACHED": {
-        "code": 8601,
-        "message": "Super Fanatik bonusu Pazar 22:00'dan sonra talep edilebilir."
-    },
-    "SUPER_FANATIK_TIME_EXPIRED": {
-        "code": 8602,
-        "message": "Super Fanatik bonusu Salı 23:59'a kadar talep edilmelidir. Süre dolmuştur."
-    },
-    "NO_DEPOSITS_IN_WEEK": {
-        "code": 8603,
-        "message": "Bu hafta hiç yatırım bulunmamaktadır."
-    },
-    "DAILY_DEPOSIT_INSUFFICIENT": {
-        "code": 8604,
-        "message": "{missingDay} günü minimum {requiredAmount} TL yatırım yapılmalıdır. Mevcut: {dailyAmount} TL."
-    },
-    "MISSING_DAILY_DEPOSITS": {
-        "code": 8605,
-        "message": "Şu günlerde yatırım bulunmamaktadır: {missingDays}"
-    },
-    "WEEKLY_SUPER_FANATIK_LIMIT_EXCEEDED": {
-        "code": 8606,
-        "message": "Bu hafta Super Fanatik bonusunu zaten aldınız."
-    },
-    "SUPER_FANATIK_BONUS_ELIGIBLE": {
-        "code": 8607,
-        "message": "Super Fanatik bonusu için uygunsunuz. Haftalık ortalama: {weeklyAverage} TL, Bonus: {bonusAmount} TL."
-    },
-    "WELCOME_BONUS_DEPOSITS_EXCEEDED": {
-        "code": 8701,
-        "message": "Hoşgeldin bonusu maksimum 3 yatırım için geçerlidir. Mevcut yatırım sayınız limitin üzerinde."
-    },
-    "WELCOME_BONUS_COMPLETED": {
-        "code": 8702,
-        "message": "Hoşgeldin bonusunun tüm aşamalarını (3 kullanım) tamamladınız."
-    },
-    "WELCOME_STAGE_DEPOSIT_MISMATCH": {
-        "code": 8703,
-        "message": "Hoşgeldin bonus aşaması uyumsuz. Beklenen aşama: {expectedStage}, mevcut kullanım: {currentStage}."
-    },
-    "WELCOME_LOSS_REQUIRED": {
-        "code": 8704,
-        "message": "Hoşgeldin bonusu {stage}. aşama için kayıp durumunda olmanız gerekir. Mevcut bakiye: {currentBalance} TL."
-    },
-    "WELCOME_STAGE_ELIGIBLE": {
-        "code": 8705,
-        "message": "Hoşgeldin bonusu {stage}. aşama için uygunsunuz. Bonus: {bonusAmount} TL. Kalan hak: {usesRemaining}."
-    },
-    "WELCOME_BONUS_ELIGIBLE": {
-        "code": 8706,
-        "message": "Hoşgeldin bonusu {stage}. aşama için uygunsunuz. Bonus: {bonusAmount} TL. Kalan hak: {remainingUses}."
-    },
-    "WELCOME_BONUS_COMPLETED": {
-        "code": 8707,
-        "message": "Hoşgeldin bonus hakkınız tamamlanmıştır. Toplam kullanım: {totalUses}."
-    },
-    "WITHDRAW_AFTER_DEPOSIT_FOUND": {
-        "code": 8708,
-        "message": "{stage}. aşama için son yatırımdan sonra çekim yapamazsınız. {withdrawCount} çekim bulundu."
-    },
-    "ACTIVE_BONUS_EXISTS": {
-        "code": 8709,
-        "message": "Aktif bonusunuz bulunduğu için yeni bonus alamazsınız."
-    },
-    "PENDING_BET_EXISTS": {
-        "code": 8710,
-        "message": "Beklemede bahsiniz bulunduğu için bonus alamazsınız."
-    },
-    "RECENT_WITHDRAW_EXISTS": {
-        "code": 8711,
-        "message": "Son 24 saat içinde çekim yaptığınız için bonus alamazsınız."
     }
-
 }

@@ -134,19 +134,14 @@ class IBonusControlRequest:
         self.response.setKey("username", self.userData["username"])
         
         # paramsları kontrol edicez teker teker herhangi birisi false dönerse işlemi durdurucaz kullanıcının neden bonus alamadığını belirtecez
-        self.response.log(f"Starting controlParams check. Total controls: {len(self.controlParams)}")
         for control in self.controlParams:
             controlName = control["controlName"]
             params = control["params"]
-            
-            self.response.log(f"Running control: {controlName} with params: {params}")
             
             if not self.controller.controls.get(controlName):
                 return self.response.setSystemError(f"{controlName} kontrolü bulunamadı","controlParams")
                 
             controlResult = self.controller.runControl(controlName, self.userData, params)
-            self.response.log(f"Control {controlName} result: {controlResult}")
-            
             if not controlResult["isValid"]:
                 if controlResult.get("error"):
                     self.response.setSystemError(controlResult["error"],"controlParams -> "+controlName)
@@ -239,7 +234,7 @@ class IBonusControlRequest:
         
         # Set overall validation status
         if len(finalValidBonuses) > 0:
-            message = f"{len(finalValidBonuses)} bonus" + ("" if len(finalValidBonuses) == 1 else "es") + " onaylandı"
+            message = f"{len(finalValidBonuses)} bonus" + ("" if len(finalValidBonuses) == 1 else "es") + " approved"
             self.response.setValid(message, True, self.controller.validMessages["BONUS_APPROVED"]["code"])
         else:
             # Priority-based error reporting
@@ -308,15 +303,6 @@ class IBonusControlRequest:
                 except Exception as e:
                     self.response.log(f"Error loading bonus {bonus.name}: {str(e)}")
                     bonus.bonusDict["isLoaded"] = False
-            
-            # Set global bonusLoaded flag based on individual bonus loading results
-            loadedBonuses = [bonus for bonus in self.bonusDataList if bonus.bonusDict.get("isLoaded", False)]
-            if loadedBonuses:
-                self.response.setKey("bonusLoaded", True)
-                self.response.log(f"{len(loadedBonuses)} bonus başarıyla yüklendi")
-            else:
-                self.response.setKey("bonusLoaded", False)
-                self.response.log("Hiçbir bonus yüklenemedi")
         
         return self.response.returnData()
                 

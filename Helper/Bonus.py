@@ -248,56 +248,7 @@ class BONUS:
                 amountCalculation = amountData.get("amountCalculation", None)
                 
                 # Fixed amounts can be either direct value or range-based
-                if amountCalculation == "welcomeBonusStage":
-                    # Special handling for welcomeBonusStage to prevent override
-                    self.response.log(f"Using welcomeBonusStage calculation")
-                    
-                    # Welcome bonus kontrolü - Spor ve Casino ayrı bonuslar
-                    result = self.controller._checkWelcomeBonus(
-                        self.userData,
-                        minDeposit=100,
-                        casinoBonusIds=[12766] if self.id == 12766 else None,
-                        sportBonusIds=[12765] if self.id == 12765 else None
-                    )
-                    
-                    if not result.get("isValid"):
-                        return result
-                    
-                    # Otomatik olarak hesaplanan bonus miktarı
-                    args = result.get("args", {})
-                    bonusAmount = args.get("bonusAmount", 0)
-                    stage = args.get("stage", 1)
-                    maxBonus = args.get("maxBonus", 2000)
-                    
-                    self.response.log(f"Welcome bonus stage {stage}: {bonusAmount} TL")
-                    
-                    # Max bonus kontrolü (zaten hesaplanmış ama double-check)
-                    maxAmount = amountData.get("maxAmount", maxBonus)
-                    bonusAmount = min(bonusAmount, maxAmount)
-                    
-                    # Set the calculated bonus amount
-                    self.bonusAmount = bonusAmount
-                    
-                    # Add deposit ID for CRM notes
-                    lastDeposit = self.controller._CampaignController__returnLastDeposit(self.userData, 30)
-                    if lastDeposit:
-                        self.noteJson["DepositIds"] = [lastDeposit["TransactionId"]]
-                        self.setDict("bonusDepositIds", [lastDeposit["TransactionId"]])
-                        self.response.log(f"Welcome bonus deposit ID: {lastDeposit['TransactionId']}")
-                    
-                    # Validate and return - NO FURTHER PROCESSING
-                    if maxAmount and beforeAmount + self.bonusAmount > maxAmount:
-                        self.bonusAmount = maxAmount - beforeAmount
-                        
-                    if self.bonusAmount <= 0:
-                        return self.controller._returnMessage(False, "BONUS_MAX_AMOUNT_EXCEEDED")
-                    
-                    self.bonusAmount = math.ceil(self.bonusAmount)
-                    self.setDict("currentBonusAmount", self.bonusAmount)
-                    self.response.log(f"Final welcome bonus amount: {self.bonusAmount}")
-                    return self.controller._returnMessage(True, "BONUS_AMOUNT_VALID", amount=self.bonusAmount)
-                    
-                elif amountData.get("amountCalculation"):
+                if amountData.get("amountCalculation"):
                     # Range based fixed amounts (like freespin tiers based on deposit)
                     calculationDateTo = amountData.get("calculationDateTo", None)
                     calculationDateFrom = amountData.get("calculationDateFrom", None)
@@ -430,83 +381,6 @@ class BONUS:
                         
                         if  baseAmount < 0:
                             return self.controller._returnMessage(False, "BONUS_USER_PROFIT")
-                        
-                    elif amountCalculation == "kombineKuponLoss":
-                        self.response.log(f"Using kombineKuponLoss calculation")
-                        
-                        # Get parameters from amount data
-                        requestTimeLimitHours = amountData.get("requestTimeLimitHours", 48)
-                        
-                        # Kontrol fonksiyonundan gelen bonus miktarını al
-                        result = self.controller._checkKombineKuponSigorta(
-                            self.userData,
-                            days=7,
-                            minMatches=4,
-                            maxMatches=8,
-                            minOdds=1.50,
-                            minBetAmount=100,
-                            maxBonusAmount=5000,
-                            requestTimeLimitHours=requestTimeLimitHours
-                        )
-                        
-                        if not result.get("isValid"):
-                            return result
-                        
-                        # Maç sayısına göre bonus yüzdesini bul
-                        bet_data = result.get("betData", {})
-                        match_count = bet_data.get("matchCount", 0)
-                        bet_amount = bet_data.get("betAmount", 0)
-                        
-                        percentage = 0
-                        for amount_range in amountRanges:
-                            min_matches = amount_range.get("minMatches", 0)
-                            max_matches = amount_range.get("maxMatches", 999)
-                            if min_matches <= match_count <= max_matches:
-                                percentage = amount_range.get("percentage", 0)
-                                break
-                        
-                        bonusAmount = (bet_amount * percentage) / 100
-                        maxAmount = amountData.get("maxAmount", 5000)
-                        bonusAmount = min(bonusAmount, maxAmount)
-                        
-                        self.response.log(f"Kombine kupon bonus: {bonusAmount} TL ({percentage}% of {bet_amount} TL)")
-                        
-                        # Add deposit ID for CRM notes
-                        lastDeposit = self.controller._CampaignController__returnLastDeposit(self.userData, 30)
-                        if lastDeposit:
-                            self.noteJson["DepositIds"] = [lastDeposit["TransactionId"]]
-                            self.setDict("bonusDepositIds", [lastDeposit["TransactionId"]])
-                            self.response.log(f"Kombine kupon deposit ID: {lastDeposit['TransactionId']}")
-                        
-                    elif amountCalculation == "superFanatikAverage":
-                        self.response.log(f"Using superFanatikAverage calculation")
-                        
-                        # Super Fanatik bonus kontrolü
-                        result = self.controller._checkSuperFanatikBonus(
-                            self.userData,
-                            minDailyDeposit=1000,
-                            maxBonusAmount=10000,
-                            requiredDays=7,
-                            bonusIds=[self.id]  # Pass current bonus ID
-                        )
-                        
-                        if not result.get("isValid"):
-                            return result
-                        
-                        # Haftalık ortalama bonus miktarı
-                        bonusAmount = result.get("bonusAmount", 0)
-                        self.response.log(f"Super Fanatik weekly average bonus: {bonusAmount} TL")
-                        
-                        # Max bonus kontrolü
-                        maxAmount = amountData.get("maxAmount", 10000)
-                        bonusAmount = min(bonusAmount, maxAmount)
-                        
-                        # Add deposit ID for CRM notes - use latest deposit from this week
-                        lastDeposit = self.controller._CampaignController__returnLastDeposit(self.userData, 30)
-                        if lastDeposit:
-                            self.noteJson["DepositIds"] = [lastDeposit["TransactionId"]]
-                            self.setDict("bonusDepositIds", [lastDeposit["TransactionId"]])
-                            self.response.log(f"Super Fanatik deposit ID: {lastDeposit['TransactionId']}")
                         
                     elif amountCalculation == "yesterdayTotalDeposit":
                         self.response.log(f"Using yesterdayTotalDeposit calculation")
