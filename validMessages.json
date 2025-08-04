@@ -165,6 +165,14 @@
         "code": 6006,
         "message": "Belirlenen gün aralığında yatırım bulunmamaktadır."
     },
+    "NO_PREVIOUS_WEEK_DEPOSIT": {
+        "code": 6008,
+        "message": "Önceki hafta ({weekStart} - {weekEnd}) yatırım işlemi bulunmamaktadır. Haftalık kayıp bonusu için geçen hafta yatırım yapmanız gerekmektedir."
+    },
+    "WEEKLY_RELOAD_NO_DEPOSIT": {
+        "code": 6009,
+        "message": "Haftalık kayıp bonusu önceki haftanın kayıpları üzerinden hesaplanır. Geçen hafta ({weekStart} - {weekEnd}) hiç yatırım yapmadığınız için bonus alamazsınız."
+    },
     "DEPOSIT_IN_RANGE": {
         "code": 6007,
         "message": "Belirlenen gün aralığında yatırım yapılmıştır."

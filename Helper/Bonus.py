@@ -704,6 +704,84 @@ class BONUS:
                     self.setDict("yesterdayTotalAmount", baseAmount)
                     self.setDict("yesterdayDepositCount", len(yesterdayDeposits))
                 
+                elif amountCalculation == "HaftalikReloaded":
+                    self.response.log(f"Using HaftalikReloaded calculation for percentage")
+                    # Weekly reload bonus - Previous week Monday 00:01 to Sunday 23:59
+                    real_time_str = self.userData["realTime"]
+                    real_now = self.controller.parse_datetime(real_time_str.replace('Z', ''))
+                    
+                    # Find previous week's Monday 00:01 to Sunday 23:59
+                    current_weekday = real_now.weekday()  # 0=Monday, 6=Sunday
+                    
+                    # Calculate previous week's Monday
+                    days_to_last_monday = current_weekday + 7  # Go back to previous Monday
+                    prev_week_monday = real_now.replace(hour=0, minute=1, second=0, microsecond=0) - timedelta(days=days_to_last_monday)
+                    
+                    # Calculate previous week's Sunday
+                    prev_week_sunday = prev_week_monday + timedelta(days=6)
+                    prev_week_sunday = prev_week_sunday.replace(hour=23, minute=59, second=59, microsecond=999999)
+                    
+                    # Convert to backend time
+                    backend_week_start = prev_week_monday - timedelta(hours=self.userData["realTimeZone"])
+                    backend_week_end = prev_week_sunday - timedelta(hours=self.userData["realTimeZone"])
+                    
+                    # Convert to string format for profit calculation
+                    calculationDateFrom = backend_week_start.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+                    calculationDateTo = backend_week_end.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+                    
+                    self.response.log(f"Previous weekly period: {prev_week_monday} to {prev_week_sunday} (user time)")
+                    self.response.log(f"Backend period: {calculationDateFrom} to {calculationDateTo}")
+                    
+                    # Calculate previous week's loss (deposits - withdrawals)
+                    isProfit = False  # We want loss calculation
+                    profitDiff, profitDepositDict = self.controller._CampaignController__returnProfitCount(
+                        self.response, 
+                        self.userData,
+                        calculationDateFrom,
+                        calculationDateTo,
+                        calculationFirstDepositAfterHourCount,
+                        calculationFirstDepositAfterHourRange,
+                        isDepositFilter,
+                        FilterAllowedBonusses,  
+                        minDiff, 
+                        maxDiff, 
+                        isProfit,
+                        FilterReverse
+                    )
+                    
+                    if type(profitDiff) == dict:
+                        # Check if this is the generic "no deposit" error and make it more specific for weekly bonus
+                        if profitDiff.get("code") == 6006:  # NO_DEPOSIT_IN_RANGE
+                            week_start_str = prev_week_monday.strftime("%d.%m.%Y")
+                            week_end_str = prev_week_sunday.strftime("%d.%m.%Y")
+                            return self.controller._returnMessage(False, "WEEKLY_RELOAD_NO_DEPOSIT", 
+                                                               weekStart=week_start_str, 
+                                                               weekEnd=week_end_str)
+                        return profitDiff
+                    
+                    if profitDiff <= 0:
+                        return self.controller._returnMessage(False, "BONUS_USER_PROFIT")
+                    
+                    baseAmount = profitDiff
+                    
+                    controlledDepositIds = profitDepositDict["DepositIds"]
+                    controlledDepositRange = profitDepositDict["DepositDateRange"]
+                    controlledAllDepositIds = profitDepositDict["AllDepositIds"]
+                    
+                    controlledWithdrawIds = profitDepositDict["WithdrawIds"]
+                    controlledWithdrawRange = profitDepositDict["WithdrawDateRange"]
+                    controlledAllWithdrawIds = profitDepositDict["AllWithdrawIds"]
+                    
+                    self.noteJson["DepositIds"] = controlledDepositIds
+                    self.noteJson["DepositDateRange"] = controlledDepositRange
+                    self.setDict("bonusDepositIds", controlledAllDepositIds)
+                    
+                    self.noteJson["WithdrawIds"] = controlledWithdrawIds
+                    self.noteJson["WithdrawDateRange"] = controlledWithdrawRange
+                    self.setDict("bonusWithdrawIds", controlledAllWithdrawIds)
+                    
+                    self.response.log(f"Previous week's loss amount: {baseAmount} TL")
+                
                 # Find applicable percentage based on amount ranges
                 applicable_range = None
                 for range_data in amountRanges:

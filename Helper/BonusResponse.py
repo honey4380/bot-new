@@ -74,10 +74,10 @@ class BonusResponse:
             self.data["validArgs"] = [{"key": key, "value": value} for key, value in args.items()]
         return self.data
     
-    def setSystemError(self, SystemErrorMessage:str, errorIn=None):
+    def setSystemError(self, SystemErrorMessage:str, errorIn=None, validCode=10000):
         self.data["SystemErrorMessage"] = SystemErrorMessage
         self.data["SystemError"] = True
-        self.data["validCode"] = 10000
+        self.data["validCode"] = validCode
         self.data["errorIn"] = errorIn
         return self.data
     

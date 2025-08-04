@@ -860,6 +860,245 @@ Found matching range: 3001-7500 for amount 6000
             </div>
         </section>
 
+        <section id="weekly-loss-bonus">
+            <h2>📅 Haftalık Kayıp Bonusu (Weekly Reload Bonus)</h2>
+            
+            <div class="feature-card">
+                <h3>HaftalikReloaded Hesaplama Türü</h3>
+                <p>Önceki haftanın (Pazartesi 00:01 - Pazar 23:59) net kayıp miktarı üzerinden hesaplanan haftalık bonus.</p>
+                
+                <div class="notes">
+                    <h4>Önemli Özellikler:</h4>
+                    <ul>
+                        <li><strong>Geçen Hafta:</strong> Mevcut hafta değil, önceki hafta hesaplanır</li>
+                        <li><strong>Tam Hafta:</strong> Pazartesi 00:01'den Pazar 23:59'a kadar</li>
+                        <li><strong>Tüm İşlemler:</strong> isDepositFilter: false ile tüm yatırım/çekimler dahil</li>
+                        <li><strong>Timezone Aware:</strong> Kullanıcının gerçek zamanını dikkate alır</li>
+                        <li><strong>Bonus Bağımsız:</strong> Diğer bonuslardan bağımsız çalışır</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>%5 Haftalık Reloaded Bonusu</h3>
+                <p>En yaygın haftalık kayıp bonusu - önceki haftanın kaybının %5'i bonus olarak verilir.</p>
+                
+                <div class="example">
+                    <h4>Tam Örnek:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 12849,
+            "priority": 15,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "HaftalikReloaded",
+                "amount": [
+                    {
+                        "min": null,
+                        "max": 20000,
+                        "percentage": 5
+                    }
+                ],
+                "minDiff": 100,
+                "isDepositFilter": false,
+                "max": null
+            },
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 7,
+                "resetHour": 0
+            },
+            "conditions": {
+                "activeBonusCheck": false
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkCurrentBalance",
+            "params": {
+                "max": 3
+            }
+        },
+        {
+            "controlName": "checkActiveBonusExist",
+            "params": {
+                "hasActiveBonus": false
+            }
+        },
+        {
+            "controlName": "checkPendingBet",
+            "params": {
+                "days": 1,
+                "hasBet": false
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Örnek Senaryo:</h4>
+                    <ul>
+                        <li><strong>Geçen hafta (28.07-03.08):</strong> 5000 TL yatırım, 2000 TL çekim = 3000 TL kayıp</li>
+                        <li><strong>Bonus hesabı:</strong> 3000 × %5 = 150 TL</li>
+                        <li><strong>Talep zamanı:</strong> Pazartesi günleri (genellikle)</li>
+                        <li><strong>Minimum şart:</strong> 100 TL haftalık kayıp</li>
+                        <li><strong>Maksimum kayıp:</strong> 20,000 TL (amount.max)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Kademeli Haftalık Reloaded Bonusu</h3>
+                <p>Kayıp miktarına göre farklı yüzdeler ile daha yüksek oranlar.</p>
+                
+                <div class="example">
+                    <h4>Tam Örnek - Kademeli Sistem:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [
+        {
+            "id": 12850,
+            "priority": 20,
+            "value": {
+                "calculationType": "percentage",
+                "amountCalculation": "HaftalikReloaded",
+                "amount": [
+                    {
+                        "min": 100,
+                        "max": 999,
+                        "percentage": 3
+                    },
+                    {
+                        "min": 1000,
+                        "max": 4999,
+                        "percentage": 5
+                    },
+                    {
+                        "min": 5000,
+                        "max": 14999,
+                        "percentage": 7
+                    },
+                    {
+                        "min": 15000,
+                        "max": null,
+                        "percentage": 10
+                    }
+                ],
+                "minDiff": 100,
+                "isDepositFilter": false,
+                "max": 5000
+            },
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 7,
+                "resetHour": 0
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Kademeli Bonus Örnekleri:</h4>
+                    <ul>
+                        <li><strong>500 TL kayıp:</strong> 500 × %3 = 15 TL bonus</li>
+                        <li><strong>3000 TL kayıp:</strong> 3000 × %5 = 150 TL bonus</li>
+                        <li><strong>10000 TL kayıp:</strong> 10000 × %7 = 700 TL bonus</li>
+                        <li><strong>20000 TL kayıp:</strong> 20000 × %10 = 2000 TL bonus</li>
+                        <li><strong>Maksimum limit:</strong> 5000 TL bonus (max parametresi)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Haftalık Bonus Talep Zamanlaması</h3>
+                <p>Haftalık bonusların genellikle ne zaman talep edilebileceği.</p>
+                
+                <div class="example">
+                    <h4>Zaman Kontrolü Örneği:</h4>
+                    <pre><code class="language-json">
+{
+    "controlParams": [
+        {
+            "controlName": "checkTimeRange",
+            "params": {
+                "startHour": 0,   // Pazartesi gece yarısından
+                "endHour": 23     // Salı gece yarısına kadar
+            }
+        }
+    ]
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Tipik Talep Senaryoları:</h4>
+                    <ul>
+                        <li><strong>Pazartesi 00:00-23:59:</strong> Sadece Pazartesi günü talep edilebilir</li>
+                        <li><strong>Pazartesi-Salı:</strong> 48 saatlik talep penceresi</li>
+                        <li><strong>7/24 Talep:</strong> Zaman kontrolü olmadan sürekli talep</li>
+                        <li><strong>Canlı Destek:</strong> Genellikle manuel olarak canlı destekten</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>isDepositFilter Parametresi</h3>
+                <p>Haftalık reload bonusu için kritik parametre - tüm yatırımları hesaba katmalı.</p>
+                
+                <div class="example">
+                    <h4>Parametre Kullanımı:</h4>
+                    <pre><code class="language-json">
+{
+    "value": {
+        "calculationType": "percentage",
+        "amountCalculation": "HaftalikReloaded",
+        "isDepositFilter": false,  // TÜM yatırımları dahil et
+        "minDiff": 100
+    }
+}
+                    </code></pre>
+                </div>
+                
+                <div class="notes">
+                    <h4>Filter Seçenekleri:</h4>
+                    <ul>
+                        <li><strong>false (Önerilen):</strong> Tüm yatırım/çekimler hesaba katılır</li>
+                        <li><strong>true:</strong> Sadece bonus alınmamış yatırımlar hesaba katılır</li>
+                        <li><strong>Reload Mantığı:</strong> Diğer bonuslardan bağımsız olarak çalışmalı</li>
+                        <li><strong>Örnek:</strong> Yatırım bonusu alınmış depositleri de reload hesabına dahil et</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>Haftalık Bonus Loglarından Takip</h3>
+                <p>HaftalikReloaded kullanıldığında aşağıdaki logları göreceksiniz:</p>
+                
+                <div class="example">
+                    <pre><code class="language-text">
+Bonus Amount Control - ID: 12849, Type: percentage, Calculation: HaftalikReloaded
+Using HaftalikReloaded calculation for percentage
+Previous weekly period: 2025-07-28 00:01:00 to 2025-08-03 23:59:59.999999 (user time)
+Backend period: 2025-07-27T21:01:00.000Z to 2025-08-03T20:59:59.000Z
+1 deposits found in the specified range
+Processing deposit: ID=218981888, Amount=3000.0
+No matching withdrawals found. Adding deposit amount 3000.0 to totalControlDiff: 3000.0
+Final totalControlDiff computed: 3000.0
+Previous week's loss amount: 3000.0 TL
+Found matching range: 0-20000 for amount 3000.0
+Total Final Bonus Amount: 150
+                    </pre>
+                </div>
+            </div>
+        </section>
+
         <section id="advanced-features">
             <h2>🚀 Gelişmiş Özellikler</h2>
             

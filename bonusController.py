@@ -201,6 +201,7 @@ class IBonusControlRequest:
                         "id": bonus["id"],
                         "name": bonusProcessor.name,
                         "error": result.get("error", result.get("message", "Unknown error")),
+                        "errorCode": result.get("code", 10000),
                         "isValid": False,
                         "bonusDict": bonusProcessor.bonusDict,
                         "priority": priority
@@ -242,7 +243,7 @@ class IBonusControlRequest:
                 # Sort by priority and return highest priority error
                 invalidBonuses.sort(key=lambda x: x.get("priority", 0), reverse=True)
                 firstInvalid = invalidBonuses[0]
-                self.response.setSystemError(firstInvalid["error"], "bonuses")
+                self.response.setSystemError(firstInvalid["error"], "bonuses", firstInvalid.get("errorCode", 10000))
                 return self.response.returnData()
             else:
                 self.response.setSystemError("No bonuses to process", "bonuses")

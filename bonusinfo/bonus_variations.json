@@ -77,7 +77,7 @@
             },
             {
                 "name": "amountCalculation",
-                "description": "Hesaplama yöntemi:\nlastDeposit: Son yatırımın yüzdesi\nloss: Kaybın yüzdesi\nprofit: Karın yüzdesi"
+                "description": "Hesaplama yöntemi:\nlastDeposit: Son yatırımın yüzdesi\nloss: Kaybın yüzdesi\nprofit: Karın yüzdesi\nHaftalikReloaded: Haftalık kayıp bonusu (Pazartesi 00:01 - Pazar 23:59)"
             },
             {
                 "name": "calculationDate",
@@ -111,11 +111,68 @@
         "useCases": [
             "%100 2000 TL Hoşgeldin Bonusu",
             "%20 Spor Yatırım Bonusu",
-            "%50 Casino Kayıp Bonusu"
+            "%50 Casino Kayıp Bonusu",
+            "%5 Haftalık Reloaded Bonusu"
         ],
         "notes": [
             "max değeri her zaman belirtilmeli",
             "amount.percentage 100'den büyük olabilir"
+        ]
+    },
+    "haftalik_kayip_bonusu": {
+        "title": "Haftalık Kayıp Bonusu (Reloaded)",
+        "description": "Önceki haftanın kayıp miktarına göre yüzde bonus verir\nPazartesi 00:01 - Pazar 23:59 arasındaki kayıpları hesaplar\nGenellikle Pazartesi günleri talep edilir",
+        "parameters": [
+            {
+                "name": "calculationType",
+                "description": "Bonus tipi - 'percentage' olarak ayarlanmalı"
+            },
+            {
+                "name": "amountCalculation", 
+                "description": "Hesaplama yöntemi - 'HaftalikReloaded' olarak ayarlanmalı"
+            },
+            {
+                "name": "amount",
+                "description": "Bonus yüzdesi ve limitleri:\nmin/max: Kayıp miktarı sınırları\npercentage: Kayıptan alınacak yüzde"
+            },
+            {
+                "name": "minDiff",
+                "description": "Minimum haftalık kayıp miktarı (örn: 100 TL)",
+                "required": "Zorunlu"
+            },
+            {
+                "name": "maxDiff",
+                "description": "Maksimum haftalık kayıp miktarı (opsiyonel)"
+            },
+            {
+                "name": "isDepositFilter",
+                "description": "false: Tüm yatırımları hesaba kat\ntrue: Sadece bonus alınmamış yatırımları hesaba kat",
+                "default": "false (önerilen)"
+            },
+            {
+                "name": "max",
+                "description": "Maksimum bonus limiti"
+            }
+        ],
+        "example": {
+            "calculationType": "percentage",
+            "amountCalculation": "HaftalikReloaded",
+            "amount": [{"min": null, "max": 20000, "percentage": 5}],
+            "minDiff": 100,
+            "isDepositFilter": false,
+            "max": null
+        },
+        "useCases": [
+            "%5 Haftalık Reloaded Bonusu",
+            "%10 Premium Haftalık Kayıp Bonusu",
+            "%3 Günlük Haftalık Reload"
+        ],
+        "notes": [
+            "Önceki hafta Pazartesi 00:01 - Pazar 23:59 arasını hesaplar",
+            "isDepositFilter: false olması önerilir (tüm yatırımları dahil eder)",
+            "minDiff minimum kayıp şartını belirler",
+            "Genellikle usage.resetDayCount: 7 ile kullanılır",
+            "Diğer bonuslarla çakışmaz (aynı yatırımdan birden fazla bonus alınabilir)"
         ]
     }
 }
