@@ -503,5 +503,13 @@
     "LAST_DEPOSIT_NOT_FOUND": {
         "code": 9172,
         "message": "Son yatırım bulunamadı"
+    },
+    "WEEKLY_CONSISTENT_DEPOSIT_FAILED": {
+        "code": 9173,
+        "message": "{weekInfo} haftalık tutarlı yatırım şartını sağlamıyorsunuz. {failedDay} ({failedDate}) günü {dailyAmount} TL yatırım yapılmış, minimum {minRequired} TL gerekli."
+    },
+    "WEEKLY_CONSISTENT_DEPOSIT_SUCCESS": {
+        "code": 9174,
+        "message": "{weekInfo} haftalık tutarlı yatırım bonusu kazandınız! ({weekStart} - {weekEnd}) döneminde her gün minimum yatırım şartını sağladığınız için {bonusAmount} TL bonus alacaksınız. Toplam yatırım: {totalWeeklyDeposit} TL."
     }
 }

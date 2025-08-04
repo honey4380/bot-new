@@ -1558,3 +1558,112 @@ class CampaignController:
         except Exception as e:
             return self.ErrorFunc(e)
 
+    def _checkWeeklyConsistentDeposit(self, userData, minDailyDeposit:float=1000):
+        """
+        Haftalık tutarlı yatırım bonusu kontrolü:
+        - Pazar 22:00-24:00 arası: Bu haftanın TD'sini hesaplar
+        - Pazartesi 00:00 - Pazar 22:00 arası: Geçen haftanın TD'sini hesaplar
+        Koşul sağlanırsa toplam yatırım tutarının 1/7'si kadar bonus verilir.
+        
+        Parameters
+        ----------
+        minDailyDeposit : float, default=1000
+            Her gün yapılması gereken minimum yatırım miktarı
+            
+        Returns
+        -------
+        dict
+            İşlem sonucunu ve bonus miktarını içeren sözlük
+        """
+        try:
+            # Şu anki zaman kontrolü
+            now = datetime.now()
+            current_weekday = now.weekday()  # 0=Pazartesi, 6=Pazar
+            current_hour = now.hour
+            
+            # Hangi haftayı hesaplayacağımızı belirle
+            if current_weekday == 6 and current_hour >= 22:
+                # Pazar 22:00-24:00 arası - bu haftayı hesapla
+                is_current_week = True
+                week_info = "Bu hafta"
+            else:
+                # Diğer tüm zamanlarda - geçen haftayı hesapla
+                is_current_week = False
+                week_info = "Geçen hafta"
+            
+            # Hafta başlangıcını belirle
+            if is_current_week:
+                # Bu hafta: Pazar 22:00-24:00 arası başvuru
+                days_since_monday = current_weekday
+                week_monday = now - timedelta(days=days_since_monday)
+            else:
+                # Geçen hafta: Diğer tüm zamanlarda başvuru
+                days_since_monday = current_weekday
+                week_monday = now - timedelta(days=days_since_monday + 7)
+            
+            week_monday = week_monday.replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            # Haftanın Pazar 22:00'ını bul
+            week_sunday_22 = week_monday + timedelta(days=6)
+            week_sunday_22 = week_sunday_22.replace(hour=22, minute=0, second=0, microsecond=0)
+            
+            # Her günü ayrı ayrı kontrol et (Pazartesi'den Pazar 22:00'a)
+            total_weekly_deposit = 0
+            daily_deposits = []
+            
+            for day_offset in range(7):
+                day_start = week_monday + timedelta(days=day_offset)
+                
+                # Son gün (Pazar) için 22:00'a kadar
+                if day_offset == 6:  # Pazar
+                    day_end = day_start.replace(hour=22, minute=0, second=0, microsecond=0)
+                else:
+                    day_end = day_start.replace(hour=23, minute=59, second=59, microsecond=999999)
+                
+                # O günün yatırımlarını al
+                deposits = self.app.getUserDeposits(
+                    userData["userId"], 
+                    day_start.replace(hour=0, minute=0, second=0, microsecond=0), 
+                    day_end
+                )["Deposits"]
+                
+                # Onaylanmış yatırımları filtrele
+                approved_deposits = [d for d in deposits if d.get("Status") == 8]
+                daily_total = sum(d["FinalAmount"] for d in approved_deposits)
+                
+                # Gün adını ekle
+                day_names = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
+                time_info = " (22:00'a kadar)" if day_offset == 6 else ""
+                
+                daily_deposits.append({
+                    'date': day_start.strftime('%Y-%m-%d'),
+                    'dayName': day_names[day_offset] + time_info,
+                    'amount': daily_total,
+                    'count': len(approved_deposits)
+                })
+                
+                # Günlük minimum kontrolü
+                if daily_total < minDailyDeposit:
+                    return self._returnMessage(False, "WEEKLY_CONSISTENT_DEPOSIT_FAILED", 
+                                             failedDate=day_start.strftime('%Y-%m-%d'),
+                                             failedDay=day_names[day_offset] + time_info,
+                                             dailyAmount=daily_total,
+                                             minRequired=minDailyDeposit,
+                                             weekInfo=week_info)
+                
+                total_weekly_deposit += daily_total
+            
+            # Bonus hesapla (toplam yatırım / 7)
+            bonus_amount = total_weekly_deposit / 7
+            
+            return self._returnMessage(True, "WEEKLY_CONSISTENT_DEPOSIT_SUCCESS",
+                                     totalWeeklyDeposit=total_weekly_deposit,
+                                     bonusAmount=bonus_amount,
+                                     weekStart=week_monday.strftime('%Y-%m-%d'),
+                                     weekEnd=week_sunday_22.strftime('%Y-%m-%d 22:00'),
+                                     weekInfo=week_info,
+                                     dailyDeposits=daily_deposits)
+                                     
+        except Exception as e:
+            return self.ErrorFunc(e)
+

@@ -1,0 +1,40 @@
+{
+    "userid": null,
+    "username": null,
+    "loadBonus": null,
+    "realTime": null,
+    "realTimeZone": 3,
+    "bonuses": [
+        {
+            "id": 12864,
+            "value": {
+                "calculationType": "dynamic",
+                "amountCalculation": "weeklyTotalDividedBy7",
+                "maxAmount": null,
+                "minAmount": 142.86
+            },
+            "usage": {
+                "maxUses": 1,
+                "resetDayCount": 7,
+                "resetHour": 22,
+                "activeDays": [1,1,1,1,1,1,1]
+            },
+            "conditions": {
+                "activeBonusCheck": false,
+                "allowMultipleBonuses": false,
+                "ipConflictCheck": true,
+                "deviceConflictCheck": true,
+                "minDepositCount": 7,
+                "consecutiveDeposits": true
+            }
+        }
+    ],
+    "controlParams": [
+        {
+            "controlName": "checkWeeklyConsistentDeposit",
+            "params": {
+                "minDailyDeposit": 1000
+            }
+        }
+    ]
+} 
