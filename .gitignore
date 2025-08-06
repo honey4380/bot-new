@@ -12,6 +12,7 @@ data/*/cookies.json
 data/*/local_storage.json
 data/*/session_storage.json
 data/*/error_screenshot.png
+!data/ACCOUNT.example.json
 
 # Logs
 logs/

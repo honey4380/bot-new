@@ -262,6 +262,26 @@
                 "allowedBonuses": [6001, 6002],  // Kontrol edilecek bonus ID'leri listesi
                 "maxPerDeposit": 1               // Her yatırım için maksimum bonus sayısı
             }
+        },
+        {
+            // checkWeeklyConsistentDeposit: Haftalık tutarlı yatırım kontrolü (YENİ)
+            "controlName": "checkWeeklyConsistentDeposit",
+            "params": {
+                "minDailyDeposit": 1000  // Her gün yapılması gereken minimum yatırım miktarı
+            }
+        },
+        {
+            // checkKombineKuponSigorta: Kombine kupon sigorta kontrolü (YENİ)
+            "controlName": "checkKombineKuponSigorta",
+            "params": {
+                "from_date": "2025-02-15T00:00:00",  // Kontrol başlangıç tarihi (opsiyonel)
+                "to_date": "2025-02-22T23:59:59",    // Kontrol bitiş tarihi (opsiyonel)
+                "minMatches": 4,                     // Minimum maç sayısı
+                "maxMatches": 8,                     // Maksimum maç sayısı
+                "minOdds": 1.50,                     // Minimum oran
+                "minBetAmount": 100,                 // Minimum bahis tutarı
+                "requestTimeLimitHours": 48          // Bahis sonucundan sonra bonus talep süresi
+            }
         }
     ]
 }
@@ -295,6 +315,114 @@
                         <li><strong>checkPendingBet</strong>: SADECE açık/bekleyen bahisleri kontrol eder</li>
                         <li><strong>checkIsUsed</strong>: Son yatırımdan sonra yapılan TÜM bahisleri (kazanmış, kaybetmiş, açık) kontrol eder</li>
                         <li>Bonus almadan önce oynamamış olma kontrolü için: <code>checkIsUsed: true</code> kullanın</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="new-controls">
+            <h2>🆕 YENİ KONTROL FONKSİYONLARI</h2>
+            
+            <div class="feature-card">
+                <h3>checkWeeklyConsistentDeposit - Haftalık Tutarlı Yatırım Bonusu</h3>
+                <p>Hafta boyunca her gün minimum yatırım yapan oyuncular için özel bonus sistemi.</p>
+                
+                <div class="notes">
+                    <h4>Çalışma Mantığı:</h4>
+                    <ul>
+                        <li><strong>Pazar 22:00-24:00:</strong> Bu haftanın toplam yatırımını hesaplar</li>
+                        <li><strong>Pazartesi 00:00 - Pazar 22:00:</strong> Geçen haftanın toplam yatırımını hesaplar</li>
+                        <li><strong>Koşul:</strong> Her gün minimum yatırım miktarı sağlanmalı</li>
+                        <li><strong>Bonus:</strong> Toplam yatırım tutarının 1/7'si kadar bonus</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>Örnek Kullanım:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [{
+        "id": 24100,
+        "value": {
+            "calculationType": "percentage",
+            "amountCalculation": "lastDeposit",
+            "amount": [{"min": 100, "max": null, "percentage": 14.28}], // 1/7 = 14.28%
+            "max": 5000
+        },
+        "usage": {
+            "maxUses": 1,
+            "resetDayCount": 7
+        },
+        "conditions": {
+            "activeBonusCheck": true
+        }
+    }],
+    "controlParams": [{
+        "controlName": "checkWeeklyConsistentDeposit",
+        "params": {
+            "minDailyDeposit": 1000  // Her gün en az 1000 TL yatırım
+        }
+    }]
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h3>checkKombineKuponSigorta - Kombine Kupon Sigorta Bonusu</h3>
+                <p>Kombine bahislerde tam 1 maçtan kaybeden oyuncular için sigorta bonusu.</p>
+                
+                <div class="notes">
+                    <h4>Sigorta Koşulları:</h4>
+                    <ul>
+                        <li><strong>Tam 1 maçtan kaybetme:</strong> Diğer tüm maçlar kazanmış olmalı</li>
+                        <li><strong>Minimum maç sayısı:</strong> 4-8 maç arası</li>
+                        <li><strong>Minimum oran:</strong> Her maç için 1.50+</li>
+                        <li><strong>Zaman sınırı:</strong> Bahis sonucundan 48 saat içinde talep</li>
+                        <li><strong>Cashout yok:</strong> Cashout yapılmamış bahisler</li>
+                    </ul>
+                </div>
+
+                <div class="example">
+                    <h4>Örnek Kullanım:</h4>
+                    <pre><code class="language-json">
+{
+    "bonuses": [{
+        "id": 24101,
+        "value": {
+            "calculationType": "fixed",
+            "amount": [{"percentage": 100}]  // 100 TL sabit bonus
+        },
+        "usage": {
+            "maxUses": -1,
+            "resetDayCount": 1
+        },
+        "conditions": {
+            "activeBonusCheck": false
+        }
+    }],
+    "controlParams": [{
+        "controlName": "checkKombineKuponSigorta",
+        "params": {
+            "minMatches": 4,           // En az 4 maç
+            "maxMatches": 8,           // En fazla 8 maç
+            "minOdds": 1.50,           // Her maç 1.50+ oran
+            "minBetAmount": 100,       // En az 100 TL bahis
+            "requestTimeLimitHours": 48 // 48 saat içinde talep
+        }
+    }]
+}
+                    </code></pre>
+                </div>
+
+                <div class="notes">
+                    <h4>Önemli Notlar:</h4>
+                    <ul>
+                        <li>Sadece kaybeden bahisler kontrol edilir</li>
+                        <li>System betler kabul edilmez</li>
+                        <li>Cashout yapılmış bahisler kabul edilmez</li>
+                        <li>Tam 1 maçtan kaybetme şartı kesindir</li>
+                        <li>Void/cancel maçlar hesaba katılmaz</li>
                     </ul>
                 </div>
             </div>

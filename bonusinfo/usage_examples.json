@@ -182,5 +182,76 @@
                 }
             ]
         }
+    },
+    "weekly_consistent_deposit": {
+        "title": "Haftalık Tutarlı Yatırım Bonusu",
+        "description": "Hafta boyunca her gün minimum yatırım yapan oyuncular için özel bonus",
+        "example": {
+            "bonuses": [{
+                "id": 24100,
+                "value": {
+                    "calculationType": "percentage",
+                    "amountCalculation": "lastDeposit",
+                    "amount": [{"min": 100, "max": null, "percentage": 14.28}],
+                    "max": 5000
+                },
+                "usage": {
+                    "maxUses": 1,
+                    "resetDayCount": 7
+                },
+                "conditions": {
+                    "activeBonusCheck": true
+                }
+            }],
+            "controlParams": [{
+                "controlName": "checkWeeklyConsistentDeposit",
+                "params": {
+                    "minDailyDeposit": 1000
+                }
+            }]
+        },
+        "notes": [
+            "Pazar 22:00-24:00 arası bu haftayı hesaplar",
+            "Diğer zamanlarda geçen haftayı hesaplar",
+            "Her gün minimum yatırım şartı",
+            "Toplam yatırımın 1/7'si kadar bonus"
+        ]
+    },
+    "kombine_kupon_sigorta": {
+        "title": "Kombine Kupon Sigorta Bonusu",
+        "description": "Kombine bahislerde tam 1 maçtan kaybeden oyuncular için sigorta",
+        "example": {
+            "bonuses": [{
+                "id": 24101,
+                "value": {
+                    "calculationType": "fixed",
+                    "amount": [{"percentage": 100}]
+                },
+                "usage": {
+                    "maxUses": -1,
+                    "resetDayCount": 1
+                },
+                "conditions": {
+                    "activeBonusCheck": false
+                }
+            }],
+            "controlParams": [{
+                "controlName": "checkKombineKuponSigorta",
+                "params": {
+                    "minMatches": 4,
+                    "maxMatches": 8,
+                    "minOdds": 1.50,
+                    "minBetAmount": 100,
+                    "requestTimeLimitHours": 48
+                }
+            }]
+        },
+        "notes": [
+            "Tam 1 maçtan kaybetme şartı",
+            "4-8 maç arası kombine bahisler",
+            "Her maç 1.50+ oran şartı",
+            "48 saat içinde talep edilmeli",
+            "System bet ve cashout kabul edilmez"
+        ]
     }
 }
