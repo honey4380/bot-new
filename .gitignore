@@ -142,6 +142,7 @@ dmypy.json
 
 # Betting bot specific
 data/
+!data/ACCOUNT.example.json
 export/
 logs/
 supervisorlog/ 
