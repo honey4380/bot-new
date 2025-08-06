@@ -1,0 +1,2 @@
+# This file ensures the supervisorlog directory is tracked by git
+# Remove this file if you want to stop tracking this directory 
