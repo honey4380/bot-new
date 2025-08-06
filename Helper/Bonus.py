@@ -782,6 +782,107 @@ class BONUS:
                     
                     self.response.log(f"Previous week's loss amount: {baseAmount} TL")
                 
+                elif amountCalculation == "kombineKuponLoss":
+                    self.response.log(f"Using kombineKuponLoss calculation for percentage")
+                    
+                    # Get control params for combined bet loss from userData
+                    controlParams = self.userData.get("controlParams", [])
+                    kombineSigortaParams = {}
+                    
+                    # Find the checkKombineKuponSigorta control params
+                    for control in controlParams:
+                        if control.get("controlName") == "checkKombineKuponSigorta":
+                            kombineSigortaParams = control.get("params", {})
+                            break
+                    
+                    days = kombineSigortaParams.get("days", 7)
+                    minMatches = kombineSigortaParams.get("minMatches", 4)
+                    maxMatches = kombineSigortaParams.get("maxMatches", 8)
+                    minOdds = kombineSigortaParams.get("minOdds", 1.50)
+                    minBetAmount = kombineSigortaParams.get("minBetAmount", 100)
+                    requestTimeLimitHours = kombineSigortaParams.get("requestTimeLimitHours", 48)
+                    
+                    # Calculate date range for checking
+                    real_time_str = self.userData["realTime"]
+                    real_now = self.controller.parse_datetime(real_time_str.replace('Z', ''))
+                    
+                    # Check last N days
+                    from_date = real_now - timedelta(days=days)
+                    to_date = real_now
+                    
+                    # Convert to backend time
+                    backend_from = from_date - timedelta(hours=self.userData["realTimeZone"])
+                    backend_to = to_date - timedelta(hours=self.userData["realTimeZone"])
+                    
+                    self.response.log(f"Checking combined bets from {from_date} to {to_date} (user time)")
+                    
+                    # Get user's combined bets that lost from exactly one match
+                    qualifyingBets = self.controller._checkKombineKuponSigorta(
+                        self.userData, 
+                        backend_from, 
+                        backend_to,
+                        minMatches,
+                        maxMatches, 
+                        minOdds,
+                        minBetAmount,
+                        requestTimeLimitHours
+                    )
+                    
+                    if not qualifyingBets or len(qualifyingBets) == 0:
+                        return self.controller._returnMessage(False, "NO_QUALIFYING_KOMBINE_KUPON")
+                    
+                    # Find the bet with highest amount if multiple qualify
+                    highestBet = max(qualifyingBets, key=lambda x: x.get("betAmount", 0))
+                    baseAmount = highestBet.get("betAmount", 0)
+                    matchCount = highestBet.get("matchCount", 0)
+                    
+                    self.response.log(f"Highest qualifying bet: {baseAmount} TL with {matchCount} matches")
+                    
+                    # Store bet information
+                    self.setDict("qualifyingKombineBet", highestBet)
+                    self.setDict("kombineMatchCount", matchCount)
+                    self.setDict("kombineBetAmount", baseAmount)
+                    
+                    # Find applicable percentage based on match count ranges (kombineKuponLoss uses minMatches/maxMatches)
+                    applicable_range = None
+                    for range_data in amountRanges:
+                        min_matches = range_data.get("minMatches")
+                        max_matches = range_data.get("maxMatches")
+                        
+                        if min_matches is None or max_matches is None:
+                            continue
+                            
+                        # Check if match count falls within this range
+                        if matchCount >= min_matches and matchCount <= max_matches:
+                            applicable_range = range_data
+                            self.response.log(f"Found matching range: {min_matches}-{max_matches} matches for {matchCount} matches")
+                            break
+                    
+                    if not applicable_range:
+                        self.response.log(f"No matching range found for {matchCount} matches")
+                        return self.controller._returnMessage(False, "BONUS_AMOUNT_RANGE_ERROR")
+
+                    self.response.log(f"Min Matches: {min_matches} - Max Matches: {max_matches} - Percentage: {applicable_range['percentage']}")
+                    self.response.log(f"Base Amount: {baseAmount}")
+                    
+                    # Calculate bonus amount
+                    self.bonusAmount = baseAmount * (applicable_range["percentage"] / 100)
+                    
+                    # Apply max amount limits
+                    if maxAmount and self.bonusAmount > maxAmount:
+                        self.bonusAmount = maxAmount
+                        
+                    if maxAmount and beforeAmount + self.bonusAmount > maxAmount:
+                        self.bonusAmount = maxAmount - beforeAmount
+                        
+                    if self.bonusAmount <= 0:
+                        return self.controller._returnMessage(False, "BONUS_MAX_AMOUNT_EXCEEDED")
+                    
+                    self.bonusAmount = math.ceil(self.bonusAmount)
+                    self.setDict("currentBonusAmount", self.bonusAmount)
+                    self.response.log(f"Total Final Bonus Amount: {self.bonusAmount}")
+                    return self.controller._returnMessage(True, "BONUS_AMOUNT_VALID")
+                
                 # Find applicable percentage based on amount ranges
                 applicable_range = None
                 for range_data in amountRanges:

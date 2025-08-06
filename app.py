@@ -2147,6 +2147,69 @@ def get_user_casino_bets_username(username):
         return jsonify({"success": False, "error": str(e)}), 500
 
 
+@app.route('/api/GetCasinoBetsReport', methods=['POST'])
+@jwt_required()
+@check_api_status
+def get_casino_bets_report():
+    """
+    Casino betlerinin raporunu getir
+    ---
+    tags:
+      - Bets Operations
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            created_from:
+              type: string
+              format: date-time
+              example: "2024-12-27T00:00:00"
+              description: "Başlangıç tarihi"
+            created_before:
+              type: string
+              format: date-time
+              example: "2024-12-27T12:00:00"
+              description: "Bitiş tarihi"
+            stateIds:
+              type: array
+              items:
+                type: integer
+              example: []
+              description: "Durum ID'leri (Opsiyonel)"
+    responses:
+      200:
+        description: Casino bet raporu başarıyla getirildi
+      400:
+        description: Geçersiz istek parametreleri
+      500:
+        description: Sunucu hatası
+      204:
+        description: İçerik bulunamadı
+    """
+    try:
+        data = request.get_json()
+        created_from = datetime.fromisoformat(data['created_from'])
+        created_before = datetime.fromisoformat(data['created_before'])
+        stateIds = data.get('stateIds')
+
+        result = fenomen_session.getCasinoBetsGeneralReport(created_from, created_before, stateIds)
+
+        if isinstance(result, dict) and result.get("ResponseCode") == -1:
+            if "Oturum süresi dolmuş" in result.get("ResponseMessage", ""):
+                return {"success": False, "error": "Oturum süresi dolmuş"}, 401
+            return {"data": result, "success": False}, 404
+
+        if not result or (isinstance(result, list) and len(result) == 0):
+            return jsonify({"success": True, "message": f"Belirtilen tarih aralığında casino bet işlemi bulunamadı"}), 204
+
+        return jsonify({"success": True, "data": result})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+        
+
 @app.route('/api/GetSportBetsReport', methods=['POST'])
 @jwt_required()
 @check_api_status

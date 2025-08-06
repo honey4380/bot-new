@@ -1,6 +1,15 @@
 import json
 import subprocess
 import urllib.parse
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get configuration from environment
+DIGIURL = os.getenv('DIGIURL', 'https://sd.bopanel.com')
+DIGIAPI = os.getenv('DIGIAPI', 'https://apisd.bopanel.com')
 
 class CurlManager:
     
@@ -29,9 +38,9 @@ class CurlManager:
 -H "accept-language: en" \
 -H "authorization: Bearer {authToken}" \
 -H "content-type: application/json" \
--H "origin: https://sd.bopanel.com" \
+-H "origin: {DIGIURL}" \
 -H "priority: u=1, i" \
--H "referer: https://sd.bopanel.com/" \
+-H "referer: {DIGIURL}/" \
 -H "sec-ch-ua: {secCHUA}" \
 -H "sec-ch-ua-mobile: ?0" \
 -H "sec-ch-ua-platform: {platform}" \
@@ -52,7 +61,7 @@ class CurlManager:
 
 if __name__ == "__main__":
     cm = CurlManager()
-    url = "https://apisd.bopanel.com/api/Report/GetClientTransactionHistoryReport"
+    url = f"{DIGIAPI}/api/Report/GetClientTransactionHistoryReport"
     authToken = "ja9MiuAPxUAAGGrUoncbB65OikkutuM4Y2ZILVo5mRus35nkgjVdp3VLVR-XcnlvqjsKQpcguFgEj7v2uyaAhz9RhKgfFbY3c9JR2nEwM6u2I6z3ltR8QCPcjovcZWpe67r2Ao7jloM2YMWmjii8psHL9RW_8fxj9GLu-edB9dKsse8R-XOh1aulKZYW8GFmxkk1EzP7Meqj8yZjBWoaLKOWNg62jo773zHV6uiUvvmung19atdM7LZqRRnSeK0AizSrKV6McPGDEt8jjQ7UqfWTJCBzG6W72HeIrK69TDCTy0crrSXNXcngCq9NswkBJsG46kQh27EHJ0DKx38QAondPk5BkB_eCM4GtXTZiDolR_XvzKyDaJiS0ULRw6qK75s2q_3FVcnN6X35uzOHNPRJQJUpaU0nS5zCDwE2TZFwCbo01TQMiXjQFtQfsfAEVLO-HOH5sV71XIM4eTwi2AQFOMsYPZs0PfcXG64oNaCZoTDtfRDXKOGCYy4eNVDKNI0B-MgLjFwTymimYFrKBEz7SH1T55SqrR0d68zxKvcakdC_SNC1jSO2Z_xu7LF7-TDdKOLnbeYV65UhSaBGCqzUDvRcra4oI85oM_kKJzOj-9qzmqR4swUJH0mD2uml"
     raw_json = {
         "DateRange": "Last24Hours",

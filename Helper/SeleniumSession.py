@@ -26,6 +26,9 @@ import pyotp
 import dotenv   
 dotenv.load_dotenv()
 
+# Get configuration from environment
+DIGIURL = os.getenv('DIGIURL', 'https://sd.bopanel.com')
+
 import logging
 from selenium.webdriver.remote.remote_connection import LOGGER
 LOGGER.setLevel(logging.WARNING)
@@ -134,7 +137,7 @@ class SeleniumSession:
         try:
             
             
-            self.driver.get('https://sd.bopanel.com/')
+            self.driver.get(f'{DIGIURL}/')
             
             self.push_key(Keys.F12)
             
@@ -341,7 +344,7 @@ class SeleniumSession:
         return result
         
     def inject_session_data(self):
-        self.driver.get("https://sd.bopanel.com")
+        self.driver.get(f"{DIGIURL}")
         self.random_wait(2, 4)
 
         try:
@@ -397,7 +400,7 @@ class SeleniumSession:
         self.driver.refresh()
 
     def load_dashboard(self):
-        self.driver.get("https://sd.bopanel.com/#/platform/welcome") 
+        self.driver.get(f"{DIGIURL}/#/platform/welcome") 
         self.random_wait(2, 4)
         
     def quit_driver(self):

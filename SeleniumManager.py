@@ -34,6 +34,13 @@ logging.basicConfig(
     ]
 )
 
+# Load environment variables
+load_dotenv()
+
+# Get configuration from environment
+DIGIURL = os.getenv('DIGIURL', 'https://sd.bopanel.com')
+DIGIAPI = os.getenv('DIGIAPI', 'https://apisd.bopanel.com')
+
 logger = logging.getLogger("SessionManager")
 
 class SeleniumSessionManager:
@@ -255,13 +262,13 @@ class SeleniumSessionManager:
         attempt = 0
         while attempt < max_attempts:
             try:
-                curl_command = f'''curl "https://apisd.bopanel.com/token" \
+                curl_command = f'''curl "{DIGIAPI}/token" \
                 -H "accept: application/json, text/plain, */*" \
                 -H "accept-language: en" \
                 -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-                -H "origin: https://sd.bopanel.com" \
+                -H "origin: {DIGIURL}" \
                 -H "priority: u=1, i" \
-                -H "referer: https://sd.bopanel.com/" \
+                -H "referer: {DIGIURL}/" \
                 -H "sec-ch-ua: \\"Microsoft Edge\\";v=\\"131\\", \\"Chromium\\";v=\\"131\\", \\"Not_A Brand\\";v=\\"24\\"" \
                 -H "sec-ch-ua-mobile: ?0" \
                 -H "sec-ch-ua-platform: \\"Windows\\"" \
@@ -510,13 +517,13 @@ class SeleniumSessionManager:
             timestamp = int(time.time() * 1000)
         
             # Tırnak işaretlerini düzelt ve escape karakterlerini düzenle
-            curl_command = f"""curl -s "https://signalrserversd.apidigi.com/signalr/ping?access_token={access_token}&_={timestamp}" \\
+            curl_command = f"""curl -s "{DIGIAPI}/signalr/ping?access_token={access_token}&_={timestamp}" \\
             -H "accept: text/plain, */*; q=0.01" \\
             -H "accept-language: tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7" \\
             -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \\
-            -H "origin: https://sd.bopanel.com" \\
+            -H "origin: {DIGIURL}" \\
             -H "priority: u=1, i" \\
-            -H "referer: https://sd.bopanel.com/" \\
+            -H "referer: {DIGIURL}/" \\
             -H "sec-ch-ua: Not A(Brand;v=8, Chromium;v=132, Microsoft Edge;v=132" \\
             -H "sec-ch-ua-mobile: ?0" \\
             -H "sec-ch-ua-platform: Windows" \\

@@ -11,12 +11,24 @@ from curlManager import CurlManager
 import pyotp
 from typing import Union
 import inspect
+import os
+from dotenv import load_dotenv
 
 from SeleniumManager import SeleniumSessionManager
 import base64
 import re
 
 import logging
+
+# Load environment variables
+load_dotenv()
+
+# Get configuration from environment
+PARTNERID = int(os.getenv('PARTNERID', 10285))
+DIGIURL = os.getenv('DIGIURL', 'https://sd.bopanel.com')
+DIGIAPI = os.getenv('DIGIAPI', 'https://apisd.bopanel.com')
+DIGIAPIDOMAIN = os.getenv('DIGIAPIDOMAIN', 'apisd.bopanel.com')
+DIGISIGNALR = os.getenv('DIGISIGNALR', 'https://signalrserversd.apidigi.com')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -42,7 +54,8 @@ class FenomenSession:
             print(f"Error: {e}")
             self.AuthToken = None
         
-        self.base_url = "https://sd.bopanel.com"
+        self.base_url = DIGIURL
+        self.partner_id = PARTNERID
         self.playerList = []
         
     def refreshSessionData(self,seleniumSession:SeleniumSession):
@@ -103,13 +116,13 @@ class FenomenSession:
         while attempt < max_attempts:
             try:
                 self.refresh_loginData()
-                curl_command = f'''curl "https://apisd.bopanel.com/token" \
+                curl_command = f'''curl "{DIGIAPI}/token" \
                 -H "accept: application/json, text/plain, */*" \
                 -H "accept-language: en-US,en;q=0.9" \
                 -H "content-type: application/x-www-form-urlencoded" \
-                -H "origin: https://sd.bopanel.com" \
+                -H "origin: {DIGIURL}" \
                 -H "priority: u=1, i" \
-                -H "referer: https://sd.bopanel.com/" \
+                -H "referer: {DIGIURL}/" \
                 -H "sec-ch-ua: {self.secCHUA}" \
                 -H "sec-ch-ua-mobile: ?1" \
                 -H "sec-ch-ua-platform: {self.platform}" \
@@ -270,14 +283,43 @@ class FenomenSession:
                         "ResponseObject": None
                     })
                     
-            curl_command = f'''curl "https://apisd.bopanel.com/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
+            # Create request object with dynamic partner ID
+            request_object = {
+                "SkipCount": 0,
+                "TakeCount": 100,
+                "OrderBy": None,
+                "FieldNameToOrderBy": "",
+                "PartnerIds": [PARTNERID],
+                "RgsClientIds": [],
+                "Ids": [],
+                "Emails": [],
+                "UserNames": [{"OperationTypeId": 1, "StringValue": username}],
+                "UniqueIds": [],
+                "FirstNames": [],
+                "LastNames": [],
+                "MobileNumbers": [],
+                "PhoneNumbers": [],
+                "CurrencyIds": [],
+                "DocumentNumbers": [],
+                "RegistrationIps": [],
+                "SportClinetIds": [],
+                "ShebaNumbers": [],
+                "SocialCardNumbers": [],
+                "FromList": False,
+                "IsQuickSearch": True
+            }
+            
+            import urllib.parse
+            encoded_request = urllib.parse.quote(json.dumps(request_object))
+            
+            curl_command = f'''curl "{DIGIAPI}/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
             -H "accept: application/json, text/plain, */*" \
             -H "accept-language: en" \
             -H "authorization: Bearer {self.AuthToken}" \
             -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-            -H "origin: https://sd.bopanel.com" \
+            -H "origin: {DIGIURL}" \
             -H "priority: u=1, i" \
-            -H "referer: https://sd.bopanel.com/" \
+            -H "referer: {DIGIURL}/" \
             -H "sec-ch-ua: {self.secCHUA}" \
             -H "sec-ch-ua-mobile: ?0" \
             -H "sec-ch-ua-platform: {self.platform}" \
@@ -287,7 +329,7 @@ class FenomenSession:
             -H "timezone: 3" \
             -H "uid: {self.generate_uid(self.uid)}" \
             -H "user-agent: {self.userAgent}" \
-            --data-raw "Method=GetClientsShort&Controller=Client&TimeZone=3&RequestObject=%7B%22SkipCount%22%3A0%2C%22TakeCount%22%3A100%2C%22OrderBy%22%3Anull%2C%22FieldNameToOrderBy%22%3A%22%22%2C%22PartnerIds%22%3A%5B%5D%2C%22RgsClientIds%22%3A%5B%5D%2C%22Ids%22%3A%5B%5D%2C%22Emails%22%3A%5B%5D%2C%22UserNames%22%3A%5B%7B%22OperationTypeId%22%3A1%2C%22StringValue%22%3A%22{username}%22%7D%5D%2C%22UniqueIds%22%3A%5B%5D%2C%22FirstNames%22%3A%5B%5D%2C%22LastNames%22%3A%5B%5D%2C%22MobileNumbers%22%3A%5B%5D%2C%22PhoneNumbers%22%3A%5B%5D%2C%22CurrencyIds%22%3A%5B%5D%2C%22DocumentNumbers%22%3A%5B%5D%2C%22RegistrationIps%22%3A%5B%5D%2C%22SportClinetIds%22%3A%5B%5D%2C%22ShebaNumbers%22%3A%5B%5D%2C%22SocialCardNumbers%22%3A%5B%5D%2C%22FromList%22%3Afalse%2C%22IsQuickSearch%22%3Atrue%7D"'''
+            --data-raw "Method=GetClientsShort&Controller=Client&TimeZone=3&RequestObject={encoded_request}"'''
     
             #result = subprocess.run(curl_command, shell=True, capture_output=True, text=True)
             result = self.run_curl_command(curl_command)
@@ -339,14 +381,14 @@ class FenomenSession:
                         "ResponseObject": None
                     })
                     
-            curl_command = f'''curl "https://apisd.bopanel.com/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
+            curl_command = f'''curl "{DIGIAPI}/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
             -H "accept: application/json, text/plain, */*" \
             -H "accept-language: en" \
             -H "authorization: Bearer {self.AuthToken}" \
             -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-            -H "origin: https://sd.bopanel.com" \
+            -H "origin: {DIGIURL}" \
             -H "priority: u=1, i" \
-            -H "referer: https://sd.bopanel.com/" \
+            -H "referer: {DIGIURL}/" \
             -H "sec-ch-ua: {self.secCHUA}" \
             -H "sec-ch-ua-mobile: ?0" \
             -H "sec-ch-ua-platform: {self.platform}" \
@@ -405,7 +447,7 @@ class FenomenSession:
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/GetClientDetailsById",
+                f"{DIGIAPI}/GetClientDetailsById",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -461,7 +503,7 @@ class FenomenSession:
             "FieldNameToOrderBy": "",
             "PartnerId": None,
             "PartnerIds": [
-                10285
+                PARTNERID
             ],
             "CreatedFrom": created_from_str,
             "CreatedBefore": created_before_str,
@@ -504,7 +546,7 @@ class FenomenSession:
             
             try:
                 result = self.curlManager.executeCurl(
-                    "https://apisd.bopanel.com/api/Client/GetClientsTotalCount",
+                    f"{DIGIAPI}/api/Client/GetClientsTotalCount",
                     self.AuthToken,
                     self.generate_uid(self.uid),
                     self.secCHUA,
@@ -574,7 +616,7 @@ class FenomenSession:
                         "ResponseObject": None
                     }
                     
-            if "apisd.bopanel.com" not in url or "https://apisd.bopanel.com" not in url:
+            if f"{DIGIAPIDOMAIN}" not in url or f"{DIGIAPI}" not in url:
                 return {
                     "ResponseCode": -1,
                     "ResponseMessage": "URL geçersiz",
@@ -587,9 +629,9 @@ class FenomenSession:
                     -H "accept-language: en" \
                     -H "authorization: Bearer {self.AuthToken}" \
                     -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-                    -H "origin: https://sd.bopanel.com" \
+                    -H "origin: {DIGIURL}" \
                     -H "priority: u=1, i" \
-                    -H "referer: https://sd.bopanel.com/" \
+                    -H "referer: {DIGIURL}/" \
                     -H "sec-ch-ua: {self.secCHUA}" \
                     -H "sec-ch-ua-mobile: ?0" \
                     -H "sec-ch-ua-platform: {self.platform}" \
@@ -688,14 +730,14 @@ class FenomenSession:
                     
                     PageCount = skipCount + 1
                     
-                    curl_command = f'''curl "https://apisd.bopanel.com/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
+                    curl_command = f'''curl "{DIGIAPI}/api/Main/ApiRequest?TimeZone=3&LanguageId=en" \
                     -H "accept: application/json, text/plain, */*" \
                     -H "accept-language: en" \
                     -H "authorization: Bearer {self.AuthToken}" \
                     -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-                    -H "origin: https://sd.bopanel.com" \
+                    -H "origin: {DIGIURL}" \
                     -H "priority: u=1, i" \
-                    -H "referer: https://sd.bopanel.com/" \
+                    -H "referer: {DIGIURL}/" \
                     -H "sec-ch-ua: {self.secCHUA}" \
                     -H "sec-ch-ua-mobile: ?0" \
                     -H "sec-ch-ua-platform: {self.platform}" \
@@ -705,7 +747,7 @@ class FenomenSession:
                     -H "timezone: 3" \
                     -H "uid: {self.generate_uid(self.uid)}" \
                     -H "user-agent: {self.userAgent}" \
-                    --data-raw "Method=GetClients&Controller=Client&TimeZone=3&RequestObject=%7B%22SkipCount%22%3A{skipCount}%2C%22TakeCount%22%3A{PerPage}%2C%22OrderBy%22%3Anull%2C%22FieldNameToOrderBy%22%3A%22%22%2C%22PartnerId%22%3Anull%2C%22PartnerIds%22%3A%5B10285%5D%2C%22CreatedFrom%22%3A%22{created_from_str}%22%2C%22CreatedBefore%22%3A%22{created_before_str}%22%2C%22Ids%22%3A%5B%5D%2C%22Emails%22%3A%5B%5D%2C%22UserNames%22%3A%5B%5D%2C%22Currencies%22%3A%5B%5D%2C%22LanguageIds%22%3A%5B%5D%2C%22Genders%22%3A%5B%5D%2C%22FirstNames%22%3A%5B%5D%2C%22LastNames%22%3A%5B%5D%2C%22DocumentNumbers%22%3A%5B%5D%2C%22DocumentIssuedBys%22%3A%5B%5D%2C%22MobileNumbers%22%3A%5B%5D%2C%22ZipCodes%22%3A%5B%5D%2C%22IsDocumentVerifieds%22%3A%5B%5D%2C%22PhoneNumbers%22%3A%5B%5D%2C%22RegionIds%22%3A%5B%5D%2C%22Categories%22%3A%5B%5D%2C%22BirthDates%22%3A%5B%5D%2C%22States%22%3A%5B%5D%2C%22CreationTimes%22%3A%5B%5D%2C%22Balances%22%3A%5B%5D%2C%22GGRs%22%3A%5B%5D%2C%22NETGamings%22%3A%5B%5D%2C%22IsEmailVerifieds%22%3A%5B%5D%2C%22ReferralIds%22%3A%5B%5D%2C%22LineIds%22%3A%5B%5D%2C%22RegistrationIps%22%3A%5B%5D%2C%22UniqueIds%22%3A%5B%5D%2C%22FromList%22%3Atrue%2C%22HasDeposit%22%3Anull%2C%22Page%22%3A{PageCount}%2C%22Top%22%3A{PerPage}%2C%22filterSearch%22%3A%22%22%2C%22DateRange%22%3A%22Today%22%2C%22SocialCardNumber%22%3Anull%2C%22SportCategoryId%22%3A%22%22%7D"'''
+                    --data-raw "Method=GetClients&Controller=Client&TimeZone=3&RequestObject=%7B%22SkipCount%22%3A{skipCount}%2C%22TakeCount%22%3A{PerPage}%2C%22OrderBy%22%3Anull%2C%22FieldNameToOrderBy%22%3A%22%22%2C%22PartnerId%22%3Anull%2C%22PartnerIds%22%3A%5B{PARTNERID}%5D%2C%22CreatedFrom%22%3A%22{created_from_str}%22%2C%22CreatedBefore%22%3A%22{created_before_str}%22%2C%22Ids%22%3A%5B%5D%2C%22Emails%22%3A%5B%5D%2C%22UserNames%22%3A%5B%5D%2C%22Currencies%22%3A%5B%5D%2C%22LanguageIds%22%3A%5B%5D%2C%22Genders%22%3A%5B%5D%2C%22FirstNames%22%3A%5B%5D%2C%22LastNames%22%3A%5B%5D%2C%22DocumentNumbers%22%3A%5B%5D%2C%22DocumentIssuedBys%22%3A%5B%5D%2C%22MobileNumbers%22%3A%5B%5D%2C%22ZipCodes%22%3A%5B%5D%2C%22IsDocumentVerifieds%22%3A%5B%5D%2C%22PhoneNumbers%22%3A%5B%5D%2C%22RegionIds%22%3A%5B%5D%2C%22Categories%22%3A%5B%5D%2C%22BirthDates%22%3A%5B%5D%2C%22States%22%3A%5B%5D%2C%22CreationTimes%22%3A%5B%5D%2C%22Balances%22%3A%5B%5D%2C%22GGRs%22%3A%5B%5D%2C%22NETGamings%22%3A%5B%5D%2C%22IsEmailVerifieds%22%3A%5B%5D%2C%22ReferralIds%22%3A%5B%5D%2C%22LineIds%22%3A%5B%5D%2C%22RegistrationIps%22%3A%5B%5D%2C%22UniqueIds%22%3A%5B%5D%2C%22FromList%22%3Atrue%2C%22HasDeposit%22%3Anull%2C%22Page%22%3A{PageCount}%2C%22Top%22%3A{PerPage}%2C%22filterSearch%22%3A%22%22%2C%22DateRange%22%3A%22Today%22%2C%22SocialCardNumber%22%3Anull%2C%22SportCategoryId%22%3A%22%22%7D"'''
 
 
                     result = self.run_curl_command(curl_command)
@@ -797,11 +839,11 @@ class FenomenSession:
 
             data = {
                 "PaymentType": 1,
-                "PartnerIds": [10285]
+                "PartnerIds": [PARTNERID]
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/api/PaymentSystem/GetPaymentSystemsForFilters",
+                f"{DIGIAPI}/api/PaymentSystem/GetPaymentSystemsForFilters",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -861,14 +903,14 @@ class FenomenSession:
             def getDepositListForPage(skipCount, PerPage):
                 print(f"Getting deposits for page {skipCount} gived {PerPage}...")
                 try:
-                    curl_command = f'''curl "https://apisd.bopanel.com/api/Report/GetPaymentRequestReport" \
+                    curl_command = f'''curl "{DIGIAPI}/api/Report/GetPaymentRequestReport" \
                     -H "accept: application/json, text/plain, */*" \
                     -H "accept-language: en" \
                     -H "authorization: Bearer {self.AuthToken}" \
                     -H "content-type: application/json" \
-                    -H "origin: https://sd.bopanel.com" \
+                    -H "origin: {DIGIURL}" \
                     -H "priority: u=1, i" \
-                    -H "referer: https://sd.bopanel.com/" \
+                    -H "referer: {DIGIURL}/" \
                     -H "sec-ch-ua: {self.secCHUA}" \
                     -H "sec-ch-ua-mobile: ?0" \
                     -H "sec-ch-ua-platform: {self.platform}" \
@@ -878,11 +920,11 @@ class FenomenSession:
                     -H "timezone: 3" \
                     -H "uid: {self.generate_uid(self.uid)}" \
                     -H "user-agent: {self.userAgent}" \
-                    --data-raw "{{\\"PartnerIds\\":[10285],\\"DateRange\\":\\"Custom\\",\\"FromDate\\":\\"{created_from_str}\\",\\"ToDate\\":\\"{created_before_str}\\",\\"ClientId\\":null,\\"TransactionId\\":null,\\"ExternalId\\":null,\\"PaymentSystemIds\\":null,\\"InitialAmountCondition\\":null,\\"InitialAmount\\":null,\\"FinalAmountCondition\\":null,\\"FinalAmount\\":null,\\"OriginalCurrencies\\":null,\\"Statuses\\":null,\\"Sorting\\":{sorting},\\"Attention\\":null,\\"HasNote\\":null,\\"Page\\":{skipCount},\\"Top\\":{PerPage},\\"Type\\":2,\\"isCleanable\\":false,\\"filterSearch\\":\\"\\"}}"'''
+                    --data-raw "{{\\"PartnerIds\\":[{PARTNERID}],\\"DateRange\\":\\"Custom\\",\\"FromDate\\":\\"{created_from_str}\\",\\"ToDate\\":\\"{created_before_str}\\",\\"ClientId\\":null,\\"TransactionId\\":null,\\"ExternalId\\":null,\\"PaymentSystemIds\\":null,\\"InitialAmountCondition\\":null,\\"InitialAmount\\":null,\\"FinalAmountCondition\\":null,\\"FinalAmount\\":null,\\"OriginalCurrencies\\":null,\\"Statuses\\":null,\\"Sorting\\":{sorting},\\"Attention\\":null,\\"HasNote\\":null,\\"Page\\":{skipCount},\\"Top\\":{PerPage},\\"Type\\":2,\\"isCleanable\\":false,\\"filterSearch\\":\\"\\"}}"'''
 
                     dataRAW = '''
                     {
-                    "PartnerIds": [10285],
+                    "PartnerIds": [PARTNERID],
                     "DateRange": "Custom",
                     "FromDate": "{created_from_str}",
                     "ToDate": "{created_before_str}",
@@ -907,15 +949,20 @@ class FenomenSession:
                     }
                     '''.replace("{created_from_str}", created_from_str).replace("{created_before_str}", created_before_str).replace("{skipCount}", str(skipCount)).replace("{PerPage}", str(PerPage))
                     
-                    result = self.curlManager.executeCurl("https://apisd.bopanel.com/api/Report/GetPaymentRequestReport",self.AuthToken,
-                                                          self.generate_uid(self.uid),
-                                                        self.secCHUA,
-                                                        self.userAgent, self.platform,dataRAW)
+                    response = self.curlManager.executeCurl(
+                        f"{DIGIAPI}/api/Report/GetPaymentRequestReport", 
+                        self.AuthToken, 
+                        self.generate_uid(self.uid),
+                        self.secCHUA,
+                        self.userAgent,
+                        self.platform,
+                        json.dumps(dataRAW)
+                    )
                     
 
 
-                    if result.stdout:
-                        json_result = json.loads(result.stdout)
+                    if response.stdout:
+                        json_result = json.loads(response.stdout)
                         
                         if json_result.get("ResponseCode") == 29:
                             self.AuthToken = self.refresh_token()
@@ -1002,14 +1049,14 @@ class FenomenSession:
                 #print(f"Getting user deposits for page {page}, perPage: {perPage}")
                 try:
                     # URL encoded data kullanarak deneyelim
-                    curl_command = f'''curl "https://apisd.bopanel.com/api/Report/GetClientPaymentRequestReport" \
+                    curl_command = f'''curl "{DIGIAPI}/api/Report/GetClientPaymentRequestReport" \
                     -H "accept: application/json, text/plain, */*" \
                     -H "accept-language: en" \
                     -H "authorization: Bearer {self.AuthToken}" \
                     -H "content-type: application/json" \
-                    -H "origin: https://sd.bopanel.com" \
+                    -H "origin: {DIGIURL}" \
                     -H "priority: u=1, i" \
-                    -H "referer: https://sd.bopanel.com/" \
+                    -H "referer: {DIGIURL}/" \
                     -H "sec-ch-ua: {self.secCHUA}" \
                     -H "sec-ch-ua-mobile: ?0" \
                     -H "sec-ch-ua-platform: {self.platform}" \
@@ -1019,7 +1066,7 @@ class FenomenSession:
                     -H "timezone: 3" \
                     -H "uid: {self.generate_uid(self.uid)}" \
                     -H "user-agent: {self.userAgent}" \
-                    --data-raw "{{\\"PartnerIds\\":[10285],\\"DateRange\\":\\"Custom\\",\\"FromDate\\":\\"{created_from_str}\\",\\"ToDate\\":\\"{created_before_str}\\",\\"ClientId\\":{userId},\\"TransactionId\\":null,\\"ExternalId\\":null,\\"PaymentSystemIds\\":null,\\"InitialAmountCondition\\":null,\\"InitialAmount\\":null,\\"FinalAmountCondition\\":null,\\"FinalAmount\\":null,\\"OriginalCurrencies\\":null,\\"Statuses\\":null,\\"Sorting\\":true,\\"Attention\\":null,\\"HasNote\\":null,\\"Page\\":{page},\\"Top\\":{perPage},\\"Type\\":2,\\"isCleanable\\":false}}"'''
+                    --data-raw "{{\\"PartnerIds\\":[{PARTNERID}],\\"DateRange\\":\\"Custom\\",\\"FromDate\\":\\"{created_from_str}\\",\\"ToDate\\":\\"{created_before_str}\\",\\"ClientId\\":{userId},\\"TransactionId\\":null,\\"ExternalId\\":null,\\"PaymentSystemIds\\":null,\\"InitialAmountCondition\\":null,\\"InitialAmount\\":null,\\"FinalAmountCondition\\":null,\\"FinalAmount\\":null,\\"OriginalCurrencies\\":null,\\"Statuses\\":null,\\"Sorting\\":true,\\"Attention\\":null,\\"HasNote\\":null,\\"Page\\":{page},\\"Top\\":{perPage},\\"Type\\":2,\\"isCleanable\\":false}}"'''
 
                     result = self.run_curl_command(curl_command)
                     
@@ -1147,7 +1194,7 @@ class FenomenSession:
                     clientId = userId if userId is not None else None
                     # Construct data raw similar to transactions but with Type=1
                     dataRAW = {
-                        "PartnerIds": [10285],
+                        "PartnerIds": [PARTNERID],
                         "DateRange": "Today",
                         "FromDate": created_from_str,
                         "ToDate": created_before_str,
@@ -1171,7 +1218,7 @@ class FenomenSession:
                         "filterSearch": ""
                     }
                     response = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/Report/GetPaymentRequestReport", 
+                        f"{DIGIAPI}/api/Report/GetPaymentRequestReport", 
                         self.AuthToken, 
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -1259,7 +1306,7 @@ class FenomenSession:
                 try:
                     jsonRaw = '''
                     {
-                        "PartnerId": 10285,
+                        "PartnerId": {PARTNERID},
                         "ClientId": {username},
                         "BetAmount": null,
                         "WinAmount": null,
@@ -1277,7 +1324,7 @@ class FenomenSession:
                     }
                     '''
                     jsonRaw = jsonRaw.replace("{username}", str(userId)).replace("{DATE1}", created_from_str).replace("{DATE2}", created_before_str).replace("{TOP}", str(top)).replace("{PAGE}", str(page))
-                    response = self.curlManager.executeCurl("https://apisd.bopanel.com/api/Client/GetClientsGamingHistory", self.AuthToken, 
+                    response = self.curlManager.executeCurl(f"{DIGIAPI}/api/Client/GetClientsGamingHistory", self.AuthToken,
                                                             self.generate_uid(self.uid),
                                                             self.secCHUA,
                                                             self.userAgent,
@@ -1350,14 +1397,14 @@ class FenomenSession:
                         "ResponseObject": None
                     }
                     
-            curl_command = f"""curl "https://apisd.bopanel.com/api/PartnerSettings/GetPartnerOperationTypes?PartnerId=10285" \
+            curl_command = f"""curl "{DIGIAPI}/api/PartnerSettings/GetPartnerOperationTypes?PartnerId={PARTNERID}" \
             -H "accept: application/json, text/plain, */*" \
             -H "accept-language: en" \
             -H "authorization: Bearer {self.AuthToken}" \
             -H "content-type: application/json" \
-            -H "origin: https://sd.bopanel.com" \
+            -H "origin: {DIGIURL}" \
             -H "priority: u=1, i" \
-            -H "referer: https://sd.bopanel.com/" \
+            -H "referer: {DIGIURL}/" \
             -H "sec-ch-ua: {self.secCHUA}" \
             -H "sec-ch-ua-mobile: ?0" \
             -H "sec-ch-ua-platform: {self.platform}" \
@@ -1433,7 +1480,7 @@ class FenomenSession:
                     }
                     
                     response = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/Report/GetClientTransactionHistoryReport", 
+                        f"{DIGIAPI}/api/Report/GetClientTransactionHistoryReport", 
                         self.AuthToken, 
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -1524,14 +1571,14 @@ class FenomenSession:
                         "ResponseObject": None
                     }
                 
-            curl_command = f"""curl "https://apisd.bopanel.com/api/Enumeration/GetEnumList" \
+            curl_command = f"""curl "{DIGIAPI}/api/Enumeration/GetEnumList" \
             -H "accept: application/json, text/plain, */*" \
             -H "accept-language: en" \
             -H "authorization: Bearer {self.AuthToken}" \
             -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
-            -H "origin: https://sd.bopanel.com" \
+            -H "origin: {DIGIURL}" \
             -H "priority: u=1, i" \
-            -H "referer: https://sd.bopanel.com/" \
+            -H "referer: {DIGIURL}/" \
             -H "sec-ch-ua: {self.secCHUA}" \
             -H "sec-ch-ua-mobile: ?0" \
             -H "sec-ch-ua-platform: {self.platform}" \
@@ -1610,7 +1657,7 @@ class FenomenSession:
                     }
                     
                     response = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/BonusCampaign/GetClientBonusCampaigns", 
+                        f"{DIGIAPI}/api/BonusCampaign/GetClientBonusCampaigns", 
                         self.AuthToken, 
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -1745,7 +1792,7 @@ class FenomenSession:
                 }
                 
                     result = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/Report/GetPlayerCasinoBetsReport", 
+                        f"{DIGIAPI}/api/Report/GetPlayerCasinoBetsReport", 
                         self.AuthToken, 
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -1813,7 +1860,7 @@ class FenomenSession:
                 "ResponseMessage": str(e),
                 "ResponseObject": None
             }
-
+            
     ## Sport Bets ##
     def getSportBets(self, created_from, created_before, userId=None, stateIds: list = None,maxBetCount=None):
         try:
@@ -1872,7 +1919,7 @@ class FenomenSession:
                     }
                     
                     result = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/Report/GetPlayerSportBetsReport",
+                        f"{DIGIAPI}/api/Report/GetPlayerSportBetsReport",
                         self.AuthToken,
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -1953,13 +2000,13 @@ class FenomenSession:
                     }
 
             # Get sport bet details by ID using GET request
-            curl_command = f'''curl "https://apisd.bopanel.com/api/Report/GetDigitainSportBetDetailsReport?Id={betId}" \
+            curl_command = f'''curl "{DIGIAPI}/api/Report/GetDigitainSportBetDetailsReport?Id={betId}" \
             -H "accept: application/json, text/plain, */*" \
             -H "accept-language: en" \
             -H "authorization: Bearer {self.AuthToken}" \
-            -H "content-type: application/json" \
-            -H "origin: https://apisd.bopanel.com" \
-            -H "referer: https://apisd.bopanel.com/" \
+            -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \
+            -H "origin: {DIGIAPI}" \
+            -H "referer: {DIGIAPI}/" \
             -H "sec-ch-ua: {self.secCHUA}" \
             -H "sec-ch-ua-mobile: ?0" \
             -H "sec-ch-ua-platform: {self.platform}" \
@@ -2025,7 +2072,7 @@ class FenomenSession:
                 print(f"Getting sport bets for page {page}, top: {top}")
                 try:
                     data = {
-                        "PartnerIds": [10285],
+                        "PartnerIds": [PARTNERID],
                         "DateRange": "Custom", 
                         "FromDate": created_from_str,
                         "ToDate": created_before_str,
@@ -2053,7 +2100,7 @@ class FenomenSession:
                     }
                     
                     result = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/Report/GetSportBetsReport",
+                        f"{DIGIAPI}/api/Report/GetSportBetsReport",
                         self.AuthToken,
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -2121,6 +2168,128 @@ class FenomenSession:
                 "ResponseMessage": str(e),
                 "ResponseObject": None
             }
+
+    def getCasinoBetsGeneralReport(self, created_from, created_before, stateIds: list = None, maxBetCount=None):
+        try:
+            if not self.AuthToken:
+                self.AuthToken = self.refresh_token()
+                if not self.AuthToken:
+                    return {
+                        "ResponseCode": -1,
+                        "ResponseMessage": "Oturum süresi dolmuş. Lütfen yeniden giriş yapın.",
+                        "ResponseObject": None
+                    }
+                    
+            created_from_str = created_from.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            created_before_str = created_before.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            
+            if (created_before - created_from).days > 31:
+                return {
+                    "ResponseCode": -1,
+                    "ResponseMessage": "Tarih aralığı maksimum 30 gün olabilir.",
+                    "ResponseObject": None
+                }
+            
+            casinoBetsList = []
+            page = 1
+            top = 100
+            
+            def getCasinoBetsForPage(page, top):
+                print(f"Getting casino bets for page {page}, top: {top}")
+                try:
+                    data = {
+                        "PartnerIds": [PARTNERID],
+                        "DateRange": "Custom", 
+                        "FromDate": created_from_str,
+                        "ToDate": created_before_str,
+                        "ByBet": True,
+                        "ClientId": None,
+                        "ShowOriginalCurrency": False,
+                        "States": stateIds,
+                        "ProviderIds": [],
+                        "Ids": None,
+                        "BetAmounts": None,
+                        "WinAmounts": None,
+                        "DeviceTypes": [],
+                        "ProductNames": None,
+                        "RoundIds": None,
+                        "BonusIds": None,
+                        "OrderBy": None,
+                        "OrderDirection": None,
+                        "Page": page,
+                        "Top": top,
+                        "filterSearch": ""
+                    }
+                    
+                    result = self.curlManager.executeCurl(
+                        f"{DIGIAPI}/api/Report/GetCasinoBetsReport",
+                        self.AuthToken,
+                        self.generate_uid(self.uid),
+                        self.secCHUA,
+                        self.userAgent,
+                        self.platform,
+                        json.dumps(data)
+                    )
+                    
+                    if result.stdout:
+                        json_result = json.loads(result.stdout)
+                        
+                        if json_result.get("ResponseCode") == 29:
+                            self.AuthToken = self.refresh_token()
+                            if not self.AuthToken:
+                                return {
+                                    "ResponseCode": -1,
+                                    "ResponseMessage": "Oturum süresi dolmuş. Lütfen yeniden giriş yapın.",
+                                    "ResponseObject": None
+                                }, False
+                            return getCasinoBetsForPage(page, top)
+                        
+                        currentList = json_result.get("ResponseObject", {}).get("Entries", [])
+                        if len(currentList) == 0:
+                            return [], False
+                        
+                        HasNext = json_result.get("ResponseObject", {}).get("HasNext", False)
+                        casinoBetsList.extend(currentList)
+                        
+                        return currentList, HasNext
+                    else:
+                        raise Exception("No output received from subprocess")
+                        
+                except Exception as e:
+                    print(f"Error: {e}")
+                    self.AuthToken = self.refresh_token()
+                    if not self.AuthToken:
+                        return {
+                            "ResponseCode": -1,
+                            "ResponseMessage": "Oturum süresi dolmuş. Lütfen yeniden giriş yapın.", 
+                            "ResponseObject": None
+                        }, False
+                    return getCasinoBetsForPage(page, top)
+            
+            while True:
+                result, HasNext = getCasinoBetsForPage(page, top)
+                if isinstance(result, dict) and result.get("ResponseCode") == -1:
+                    return result
+                
+                if maxBetCount and len(casinoBetsList) >= maxBetCount:
+                    break
+                
+                if HasNext:
+                    page += 1
+                else:
+                    break
+            
+            with open('export/casinoBetsList.json', 'w') as f:
+                json.dump(casinoBetsList, f)
+            
+            return casinoBetsList
+            
+        except Exception as e:
+            return {
+                "ResponseCode": -1,
+                "ResponseMessage": str(e),
+                "ResponseObject": None
+            }
                         
     ## Multi Account count ##
     def getMultiAccountCount(self, userId=None):
@@ -2142,13 +2311,13 @@ class FenomenSession:
                 }
                 
             response = self.runCustomCurlCommand(
-                f"https://apisd.bopanel.com/api/ReportRiskyActions/GetPlayerMultiAccounts?clientId={userId}",
+                f"{DIGIAPI}/api/ReportRiskyActions/GetPlayerMultiAccounts?clientId={userId}",
                 "form",
                 ""
             )
 
             #response = self.curlManager.executeCurl(
-            #    f"https://apisd.bopanel.com/api/ReportRiskyActions/GetPlayerMultiAccounts?clientId={userId}",
+            #    ff"{DIGIAPI}/api/ReportRiskyActions/GetPlayerMultiAccounts?clientId={userId}",
             #    self.generate_uid(self.uid),
             #    self.secCHUA,
             #    self.userAgent,
@@ -2185,7 +2354,7 @@ class FenomenSession:
             }
 
     #Active Domain Info
-    def getActiveDomain(self, partnerId=10285):
+    def getActiveDomain(self, partnerId={PARTNERID}):
         try:
             if not self.AuthToken:
                 self.AuthToken = self.refresh_token()
@@ -2206,7 +2375,7 @@ class FenomenSession:
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/api/DomainConfiguration/GetDomains",
+                f"{DIGIAPI}/api/DomainConfiguration/GetDomains",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2267,7 +2436,7 @@ class FenomenSession:
             def getBonusCampaignsForPage(page):
                 try:
                     data = {
-                        "PartnerIds": [10285],
+                        "PartnerIds": [PARTNERID],
                         "DateRange": "AllTimes", 
                         "InternalName": None,
                         "Id": None,
@@ -2286,7 +2455,7 @@ class FenomenSession:
                     }
 
                     response = self.curlManager.executeCurl(
-                        "https://apisd.bopanel.com/api/BonusCampaign/GetBonusCampaigns",
+                        f"{DIGIAPI}/api/BonusCampaign/GetBonusCampaigns",
                         self.AuthToken,
                         self.generate_uid(self.uid),
                         self.secCHUA,
@@ -2381,7 +2550,7 @@ class FenomenSession:
             data = {
                 "bonusCampaignId": bonusCampaignId,
                 "clientId": clientId,
-                "partnerId": 10285,
+                "partnerId": {PARTNERID},
                 "productType": productType,
                 "hasLinkIteration": False,
                 "iterationKey": None,
@@ -2391,7 +2560,7 @@ class FenomenSession:
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/api/BonusCampaign/AddManualBonusCampaignToClient",
+                f"{DIGIAPI}/api/BonusCampaign/AddManualBonusCampaignToClient",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2504,11 +2673,11 @@ class FenomenSession:
             data = {
                 "FromDate": created_from_str,
                 "ToDate": created_before_str,
-                "PartnerIds": [10285]
+                "PartnerIds": [{PARTNERID}]
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/GetDeposits",
+                f"{DIGIAPI}/GetDeposits",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2561,14 +2730,14 @@ class FenomenSession:
                 "FromDate": created_from_str,
                 "ToDate": created_before_str,
                 "IsCreatedOrUpdate": False,
-                "PartnerIds": [10285],
+                "PartnerIds": [{PARTNERID}],
                 "ByBet": 1,
                 "filterSearch": "",
                 "DateRange": "Custom"
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/GetWithdrawals",
+                f"{DIGIAPI}/GetWithdrawals",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2620,14 +2789,14 @@ class FenomenSession:
                 "FromDate": created_from_str,
                 "ToDate": created_before_str,
                 "IsCreatedOrUpdate": False,
-                "PartnerIds": [10285],
+                "PartnerIds": [{PARTNERID}],
                 "ByBet": 1,
                 "filterSearch": "",
                 "DateRange": "Custom"
             }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/GetProviderBets",
+                f"{DIGIAPI}/GetProviderBets",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2679,13 +2848,13 @@ class FenomenSession:
                 "FromDate": created_from_str,
                 "ToDate": created_before_str,
                 "IsCreatedOrUpdate": False,
-                "PartnerIds": [10285],
+                "PartnerIds": [{PARTNERID}],
                 "ByBet": 1,
                 "filterSearch": "",
                 "DateRange": "Custom"
             }
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/GetPlayersInfo",
+                f"{DIGIAPI}/GetPlayersInfo",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2731,7 +2900,7 @@ class FenomenSession:
                     }
 
             response = self.curlManager.executeCurl(
-                "https://apisd.bopanel.com/ChangeClientDetails",
+                f"{DIGIAPI}/ChangeClientDetails",
                 self.AuthToken,
                 self.generate_uid(self.uid),
                 self.secCHUA,
@@ -2779,13 +2948,13 @@ class FenomenSession:
             timestamp = int(time.time() * 1000)
         
             # Tırnak işaretlerini düzelt ve escape karakterlerini düzenle
-            curl_command = f"""curl -s "https://signalrserversd.apidigi.com/signalr/ping?access_token={access_token}&_={timestamp}" \\
+            curl_command = f"""curl -s "{DIGISIGNALR}/signalr/ping?access_token={access_token}&_={timestamp}" \\
             -H "accept: text/plain, */*; q=0.01" \\
             -H "accept-language: tr,en;q=0.9,en-GB;q=0.8,en-US;q=0.7" \\
             -H "content-type: application/x-www-form-urlencoded; charset=UTF-8" \\
-            -H "origin: https://sd.bopanel.com" \\
+            -H "origin: {DIGIURL}" \\
             -H "priority: u=1, i" \\
-            -H "referer: https://sd.bopanel.com/" \\
+            -H "referer: {DIGIURL}/" \\
             -H "sec-ch-ua: {self.secCHUA}" \\
             -H "sec-ch-ua-mobile: ?0" \\
             -H "sec-ch-ua-platform: {self.platform}" \\

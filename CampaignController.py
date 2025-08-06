@@ -1667,3 +1667,129 @@ class CampaignController:
         except Exception as e:
             return self.ErrorFunc(e)
 
+    def _checkKombineKuponSigorta(self, userData, from_date=None, to_date=None, minMatches=4, maxMatches=8, minOdds=1.50, minBetAmount=100, requestTimeLimitHours=48):
+        """
+        Combined sports bet insurance check for bets that lost from exactly one match
+        
+        Parameters:
+            from_date: Start date for checking bets (if None, uses last 7 days)
+            to_date: End date for checking bets (if None, uses current time)
+            minMatches: Minimum number of matches in combo
+            maxMatches: Maximum number of matches in combo
+            minOdds: Minimum odds per match
+            minBetAmount: Minimum bet amount
+            requestTimeLimitHours: Time limit for requesting bonus after bet settlement
+        
+        Returns:
+            List of qualifying combined bets that lost from exactly one match
+        """
+        try:
+            # Set default date range if not provided
+            if from_date is None or to_date is None:
+                real_time_str = userData.get("realTime", datetime.now().isoformat())
+                real_now = self.parse_datetime(real_time_str.replace('Z', ''))
+                to_date = real_now if to_date is None else to_date
+                from_date = real_now - timedelta(days=7) if from_date is None else from_date
+                
+                # Convert to backend time
+                timezone_hours = userData.get("realTimeZone", 3)
+                from_date = from_date - timedelta(hours=timezone_hours)
+                to_date = to_date - timedelta(hours=timezone_hours)
+            
+            # Get user's sport bets in the specified date range
+            # Only get lost bets (state 2 = lost)
+            sportBets = self.app.getSportBets(from_date, to_date, userData["userId"], [2])
+            
+            if not sportBets or len(sportBets) == 0:
+                return []
+            
+            qualifyingBets = []
+            
+            for bet in sportBets:
+                try:
+                    # Skip if not enough basic info
+                    betAmount = bet.get("BetAmount", 0)
+                    if betAmount < minBetAmount:
+                        continue
+                    
+                    # Get bet details to check matches and odds
+                    betDetails = self.app.getSportBetDetails(bet.get("BetDocumentId"))
+                    if not betDetails or isinstance(betDetails, dict) and betDetails.get("ResponseCode") == -1:
+                        continue
+                    
+                    betInfo = betDetails.get("ResponseObject", {})
+                    selections = betInfo.get("BetSelections", [])
+                    
+                    if not selections or len(selections) < minMatches:
+                        continue
+                    
+                    if len(selections) > maxMatches and maxMatches != 999:
+                        continue
+                    
+                    # Check if it's a system bet (not allowed)
+                    if betInfo.get("IsSystemBet", False):
+                        continue
+                    
+                    # Check if it had cashout (not allowed)
+                    if betInfo.get("HasCashOut", False):
+                        continue
+                    
+                    # Check time limit (48 hours from bet settlement)
+                    settlementTime = bet.get("CalculationTime")
+                    if settlementTime:
+                        settlementDate = self.parse_datetime(settlementTime)
+                        timeDiff = datetime.now() - settlementDate
+                        if timeDiff.total_seconds() > (requestTimeLimitHours * 3600):
+                            continue
+                    
+                    # Check odds and count losing matches
+                    validOdds = True
+                    lostMatches = 0
+                    wonMatches = 0
+                    
+                    for selection in selections:
+                        odds = selection.get("Odd", 0)
+                        if odds < minOdds:
+                            validOdds = False
+                            break
+                        
+                        # Check selection result (1=won, 2=lost, 3=void/cancelled)
+                        selectionStatus = selection.get("Status", 0)
+                        if selectionStatus == 2:  # Lost
+                            lostMatches += 1
+                        elif selectionStatus == 1:  # Won
+                            wonMatches += 1
+                    
+                    if not validOdds:
+                        continue
+                    
+                    # Must lose from exactly one match (others should be won)
+                    if lostMatches != 1:
+                        continue
+                    
+                    # All other matches should be won
+                    if wonMatches != (len(selections) - 1):
+                        continue
+                    
+                    # This bet qualifies
+                    qualifyingBets.append({
+                        "betId": bet.get("BetDocumentId"),
+                        "betAmount": betAmount,
+                        "matchCount": len(selections),
+                        "creationTime": bet.get("CreationTime"),
+                        "settlementTime": settlementTime,
+                        "lostMatches": lostMatches,
+                        "wonMatches": wonMatches
+                    })
+                    
+                except Exception as e:
+                    # Log error but continue with other bets
+                    print(f"Error processing bet {bet.get('BetDocumentId', 'unknown')}: {str(e)}")
+                    continue
+            
+            return qualifyingBets
+            
+        except Exception as e:
+            print(f"Error in _checkKombineKuponSigorta: {str(e)}")
+            return []
+
